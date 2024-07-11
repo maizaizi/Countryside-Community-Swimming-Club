@@ -1,0 +1,344 @@
+{% extends 'memberhome.html' %}
+
+{% block subcontent %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .table-container {
+            max-width: 70%; 
+            margin: auto; 
+        }
+    </style>
+    
+</head>
+
+  <!-- Display flash messages -->
+  <div class="alert-container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Filters -->
+<div class="container text-center mt-5 mb-2"> 
+    <div class="row g-3 justify-content-center">
+        <div class="col-auto">
+            <select name="class_name" id="classNameFilter" class="form-select">
+                <option value="">Select Class</option>
+                {% for class in classes %}
+                <option value="{{ class.name }}">{{ class.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <select name="instructor_name" id="instructorNameFilter" class="form-select">
+                <option value="">Select Instructor</option>
+                {% for instructor in instructors %}
+                <option value="{{ instructor.full_name }}">{{ instructor.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button id="filterButton" type="button" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Weekday Selector -->
+<div class="week-selector-container">
+    <button class="week-btn prev" onclick="scrollWeek(-1)">&#10094;</button>
+    <div id="weekdays" class="weekdays">
+        <div class="day" data-day="Monday">Mon</div>
+        <div class="day" data-day="Tuesday">Tue</div>
+        <div class="day" data-day="Wednesday">Wed</div>
+        <div class="day" data-day="Thursday">Thu</div>
+        <div class="day" data-day="Friday">Fri</div>
+        <div class="day" data-day="Saturday">Sat</div>
+        <div class="day" data-day="Sunday">Sun</div>
+    </div>
+    <button class="week-btn next" onclick="scrollWeek(1)">&#10095;</button>
+</div>
+
+<div class="table-container">
+      <table id="scheduleTable" class="table" style="display: none;">
+          <thead>
+          <tr>
+              
+              <th>Class Name</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Pool Name</th>
+              <th>Lane Name</th>
+              <th>Instructor Name</th>
+              <th>Capacity</th>
+              <th>Action</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Results will be inserted here -->
+      </tbody>
+   </table>
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize weekday display
+    displayWeekdays();
+
+    // Set click listener on filter button
+    document.getElementById('filterButton').addEventListener('click', function() {
+        const selectedDay = document.querySelector('.weekdays .day.active').getAttribute('data-day');
+        const className = document.getElementById("classNameFilter").value;
+        const instructorName = document.getElementById("instructorNameFilter").value;
+        filterClasses(selectedDay, className, instructorName);
+    });
+
+    // Set click listeners on weekday buttons
+    document.querySelectorAll('.weekdays .day').forEach(dayBtn => {
+        dayBtn.addEventListener('click', function() {
+            // Remove active class from all days
+            document.querySelectorAll('.weekdays .day').forEach(day => {
+                day.classList.remove('active');
+            });
+            // Add active class to the clicked day
+            this.classList.add('active');
+
+            const selectedDay = this.getAttribute('data-day');
+            const className = document.getElementById("classNameFilter").value;
+            const instructorName = document.getElementById("instructorNameFilter").value;
+            filterClasses(selectedDay, className, instructorName);
+        });
+    });
+
+    // Set click listener on book buttons
+    document.getElementById('scheduleTable').addEventListener('click', function(event) {
+        if (event.target.classList.contains('book-button')) {
+            const schedule_id = event.target.getAttribute('data-schedule-id');
+            bookTimetable(schedule_id);
+        }
+    });
+});
+function displayWeekdays(startIndex = 0) {
+    const weekdaysContainer = document.querySelector('.weekdays');
+    weekdaysContainer.innerHTML = ''; 
+
+    const today = new Date();
+    for (let i = startIndex; i < startIndex + 5; i++) { 
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + i);
+
+        const dayElement = document.createElement('div');
+        dayElement.className = 'day';
+        
+        
+        const nzDateStr = futureDate.toLocaleDateString('en-NZ', {
+            timeZone: 'Pacific/Auckland', 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit'
+        }).split('/').reverse().join('-'); 
+
+   
+        dayElement.setAttribute('data-date', nzDateStr);
+
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'date';
+        dateSpan.textContent = nzDateStr; 
+    
+        const weekdaySpan = document.createElement('span');
+        weekdaySpan.className = 'weekday';
+        weekdaySpan.textContent = futureDate.toLocaleDateString('en-NZ', {
+            timeZone: 'Pacific/Auckland', 
+            weekday: 'long'
+        });
+
+        dayElement.appendChild(dateSpan);
+        dayElement.appendChild(document.createElement('br'));
+        dayElement.appendChild(weekdaySpan);
+
+        dayElement.addEventListener('click', function() {
+            document.querySelectorAll('.weekdays .day').forEach(day => day.classList.remove('active'));
+            this.classList.add('active'); 
+
+            const selectedDate = this.getAttribute('data-date');
+            filterClasses(selectedDate);
+        });
+
+        weekdaysContainer.appendChild(dayElement);
+    }
+}
+
+
+let currentDayIndex = 0; 
+
+function scrollWeek(direction) {
+    const maxIndex = 6; 
+    currentDayIndex += parseInt(direction, 10); 
+    currentDayIndex = Math.max(0, Math.min(currentDayIndex, maxIndex - 4)); 
+
+    displayWeekdays(currentDayIndex);
+}function filterClasses(day, className, instructorName) {
+
+    const selectedDateElement = document.querySelector('.weekdays .day.active');
+    if (!selectedDateElement) {
+        console.error('No date selected');
+        return;
+    }
+    const selectedDate = selectedDateElement.getAttribute('data-date'); 
+
+    const queryParams = new URLSearchParams({
+        day: selectedDate,
+        class_name: className,
+        instructor_name: instructorName
+    }).toString();
+
+    const requestURL = "/member/get_classes?" + queryParams;
+
+
+    fetch(requestURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateClassesTable(data);
+        })
+        .catch(error => console.error('Error fetching classes:', error));
+}
+
+function updateClassesTable(classesData) {
+    const tbody = document.querySelector('#scheduleTable tbody');
+    tbody.innerHTML = ''; 
+    if (!classesData || classesData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9">No classes found for the selected criteria.</td></tr>'; 
+        return;
+    }
+
+    classesData.forEach(classItem => {
+        const row = document.createElement('tr');
+
+
+        [ 'class_name', 'start_time', 'end_time', 'pool_name', 'lane_name', 'instructor_name', 'class_capacity'].forEach(field => {
+            const cell = document.createElement('td');
+            if (field === 'class_capacity') { 
+                cell.textContent = classItem[field] ? classItem[field] : 'N/A'; 
+            } else {
+                cell.textContent = classItem[field];
+            }
+            row.appendChild(cell);
+        });
+
+
+        const formCell = document.createElement('td');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('btn', 'btn-primary', 'book-button');
+        button.setAttribute('data-schedule-id', classItem.schedule_id);
+        button.textContent = 'Book';
+        formCell.appendChild(button);
+        row.appendChild(formCell);
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById('scheduleTable').style.display = 'table'; 
+}
+
+
+
+
+function bookTimetable(schedule_id) {
+
+    const selectedDate = document.querySelector('.weekdays .day.active')?.getAttribute('data-date');
+    if (!selectedDate) {
+        Swal.fire('Error!', 'Please select a date before booking.', 'error');
+        return; 
+    }
+
+    const requestURL = `/member/book_timetable/${schedule_id}`;
+    const dataToSend = {
+        selected_date: selectedDate,
+    };
+
+    fetch(requestURL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            
+        },
+        body: JSON.stringify(dataToSend), 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); 
+    })
+    .then(data => {
+        if (data.status === 'redirect' && data.redirect_url) {
+            Swal.fire({
+                title: 'Membership Required',
+                text: data.message,
+                icon: 'warning',
+                confirmButtonText: 'Renew Now'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = data.redirect_url;
+                }
+            });
+        } else if (data.status === 'success') {
+            Swal.fire({
+                title: 'Success!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.reload(); 
+            });
+        } else if (data.status === 'error') {
+
+            Swal.fire({
+                title: 'Error!',
+                text: data.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error booking class:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to book class. Please try again later.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
+
+function showAlert(message, type) {
+    const alertContainer = document.querySelector('.alert-container');
+    const alertBox = document.createElement('div');
+    alertBox.className = `alert ${type === 'success' ? 'alert-success' : 'alert-danger'}`;
+    alertBox.role = 'alert';
+    alertBox.textContent = message;
+    
+    alertContainer.appendChild(alertBox);
+    setTimeout(() => alertBox.remove(), 2000);
+}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,174 @@
+{%extends 'home.html'%}
+
+{%block subcontent%}
+<div class="register-page">
+    <div class="register-container">
+        <p class="register-title fw-bold fs-3">Register Form</p>
+        {% if msg %}
+        <div class="alert">{{ msg }}</div>
+        {% endif %}
+        <div class="row justify-content-center">
+           
+                <form action="{{url_for('auth.register')}}" method="post" 
+                class="needs-validation" enctype="multipart/form-data" novalidate >
+                    
+                    <div class="row mb-3 justify-content-center">
+                        <label for="username" class="col-3 col-form-label"><b>User Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="username" name="username" required 
+                            placeholder="Username">
+                            <div class="invalid-feedback text-start">
+                                Please enter the username.
+                            </div> 
+                        </div>
+                       
+                    </div>
+           
+                    <div class="row mb-3 justify-content-center">
+                        <label for="password" class="col-3 col-form-label"><b>Password:</b></label>
+                        <div class="col-6">
+                            <input type="password" class="form-control" id="password" name="password" required
+                            placeholder="Password">
+                            <div class="invalid-feedback text-start">
+                                Please enter the password.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="title" class="col-3 col-form-label"><b>Title:</b></label>
+                        <div class=" col-6">
+                            <select id="title"  name="title"  required class="form-select" aria-label="Default select example" >
+                                <option   disabled selected value>Please select the title</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Ms">Ms</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Mx">Mx</option>
+                                <option value="None">None</option>
+                            </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the title.
+                            </div>  
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="first_name" class="col-3 col-form-label"><b>First Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="first_name" name="first_name" required 
+                            placeholder="First Name">
+                            <div class="invalid-feedback text-start">
+                                Please enter the first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="family_name" class="col-3 col-form-label"><b>Last Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="family_name" name="family_name" required
+                            placeholder="Family Name">
+                            <div class="invalid-feedback text-start">
+                                Please enter the family name.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="position" class="col-3 col-form-label"><b>Position:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="position" name="position" required           
+                            placeholder="Position">
+                            <div class="invalid-feedback text-start">
+                                Please enter the position.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="phone" class="col-3 col-form-label"><b>Phone:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="phone" name="phone" required           
+                            placeholder="Phone">
+                            <div class="invalid-feedback text-start">
+                                Please enter the phone number.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="email" class="col-3 col-form-label"><b>Email:</b></label>
+                        <div class="col-6">
+                            <input type="email" class="form-control" id="email" name="email" required           
+                            placeholder="Email">
+                            <div class="invalid-feedback text-start">
+                                Please provide a valid email.
+                            </div>  
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-3 justify-content-center">
+                        <label for="address" class="col-3 col-form-label"><b>Address:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="address" name="address" required           
+                            placeholder="Address">
+                            <ul class="list-group" id="address-list"></ul>
+                            <div class="invalid-feedback text-start">
+                                Please enter the address.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="dob" class="col-3 col-form-label"><b>Date of Birth:</b></label>
+                        <div class="col-6">
+                            <input type="date" class="form-control" id="dob" name="dob" required           
+                            >
+                            <div class="invalid-feedback text-start">
+                                Please select the date of birth.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="subscription" class="col-3 col-form-label"><b>Subscription:</b></label>
+                        <div class=" col-6">
+                            <select id="subscription"  name="subscription"  required class="form-select" aria-label="Default select example" >
+                                <option   disabled selected value>Subscription type</option>
+                                {%for sub in subscription%}
+                                <option value="{{sub['id']}}" class="fw-bold">{{sub['type']}}: ${{sub['price']}}</option>
+                                {%endfor%}
+                            </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the subscription type.
+                            </div>  
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="health_info" class="col-3 col-form-label"><b>Health Info:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="health_info" name="health_info"           
+                            placeholder="Health information">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="image" class="col-3 col-form-label"><b>Profile Image:</b></label>
+                        <div class="col-6">
+                            <input type="file" class="form-control" id="image" name="image">
+                        </div>  
+                    </div>
+                
+                    <div class="form-group">
+                        <p>Already have an account? <a href="{{url_for('auth.login')}}">Login here</a></p>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <div class="text-center py-3 col-6">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>  
+                    </div>
+                    
+                    
+                </form>
+            
+            </div>
+            
+
+        
+    </div>
+    </div>
+</div>
+    
+{%endblock%}

@@ -1,0 +1,89 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+<div class="container">
+    <!--display the flash message after action-->
+    {% for message in get_flashed_messages() %}            
+    <div class="alert alert-danger text-center my-4" role="alert">
+    <p class="pt-3"><b>{{ message }}</b></p>
+    </div>  
+    {% endfor %}
+    
+    <div>
+        <h3 class="text-center pt-5 mb-3">Membership Status</h3>
+    </div>
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-3 text-center">
+                <div class="rectangle-heading">
+                    <h5 class="text-center">All Membership</h5>
+                  </div>
+                  <div class="circle-container">
+                    <div class="circle"  data-value="all_membership">
+                      {{membership_number['number']}}
+                    </div>
+                  </div>
+                  
+            </div>
+            <div class="col-3 text-center">
+                <div class="rectangle-heading">
+                    <h5 class="text-center">Expired  Soon</h5>
+                  </div>
+                  <div class="circle-container">
+                    <div class="circle" data-value="expired_soon">
+                      {{expired_soon_number['number']}}
+                    </div>
+                  </div>
+                  <div id="expired_soon_button" class="button-container not-show ">
+                    <div   class="circle-container">
+                        <a href="{{url_for('manager.expire_soon_reminder')}}">
+                            <button type="button" class="btn btn-outline-success fw-bold">Send Reminder</button></a>
+                      </div>
+                  </div>
+                  
+            </div>
+            <div class="col-3 text-center">
+                <div class="rectangle-heading">
+                    <h5 class="text-center">Expired</h5>
+                </div>
+                <div class="circle-container">
+                    <div class="circle" data-value="expired">
+                        {{expired_number['number']}}
+                    </div>
+                </div>
+                <div id="expired_button" class="button-container not-show ">
+                    <div class="circle-container ">
+                        <a href="{{url_for('manager.expired_reminder')}}">
+                            <button type="button" class="btn btn-outline-success fw-bold">Send Reminder</button></a>
+                      </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+   
+    <div id="membership-table" class="not-show">
+   </div>
+   
+</div>
+<script>
+    $(document).ready(function() {
+        $('.circle').click(function(){
+            $('#membership-table').show()
+            $(".circle").removeClass("active");
+            $(this).addClass("active");
+            var filter_value = $(this).data("value");
+            var buttonContainerId = filter_value + "_button";
+            $(".button-container").hide();
+            $("#" + buttonContainerId).show();
+            $.ajax({
+                url: '/manager/membership_filter',
+                type: 'POST',
+                data: {filter: filter_value},
+                success: function(response){
+                    $('#membership-table').empty();
+                    $('#membership-table').html(response);
+                }
+            });
+        });
+    });
+</script>
+{%endblock%}

@@ -1,0 +1,215 @@
+{% extends 'home.html' %}
+
+{% block subcontent %}
+
+    <div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-auto">
+                <input type="date" id="weekPicker" name="weekPicker" class="form-control">
+            </div>
+            <div class="col-auto">
+                <button id="loadWeek" class="btn btn-primary">Load Week</button>
+            </div>
+            <div class="col-auto">
+                <select name="class_name" id="classNameFilter" class="form-select">
+                    <option value="">Select Class</option>
+                    {% for class in classes %}
+                    <option value="{{ class.name }}">{{ class.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <select name="instructor_name" id="instructorNameFilter" class="form-select">
+                    <option value="">Select Instructor</option>
+                    {% for instructor in instructors %}
+                    <option value="{{ instructor.full_name }}">{{ instructor.full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <button id="filterButton" type="button" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+        
+        <div class="table-container mt-5">
+            <table id="weekScheduleTable" class="table table-fixed">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Results will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        fetchWeekClasses(todayString);
+        updateTableHeader(todayString);
+    });
+
+    document.getElementById('loadWeek').addEventListener('click', function() { 
+        const pickedDate = document.getElementById('weekPicker').value;
+        if (pickedDate) {
+            fetchWeekClasses(pickedDate);
+            updateTableHeader(pickedDate);  
+        }
+    });
+    
+    document.getElementById('filterButton').addEventListener('click', function() {
+    const pickedDate = document.getElementById('weekPicker').value;
+    const className = document.getElementById('classNameFilter').value;
+    const instructorName = document.getElementById('instructorNameFilter').value;
+    
+    if (pickedDate) {
+        fetchWeekClasses(pickedDate, className, instructorName);
+    }
+});
+
+
+
+function updateTableHeader(startDate) {
+    const startDay = new Date(startDate);
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const thead = document.querySelector('#weekScheduleTable thead');
+    
+    
+    thead.innerHTML = ''; 
+
+
+    const timeRow = document.createElement('tr');
+    const timeHeader = document.createElement('th');
+    timeHeader.textContent = 'Time';
+    timeHeader.setAttribute('rowspan', '2'); 
+    timeRow.appendChild(timeHeader);
+    
+
+    const dayRow = document.createElement('tr');
+
+
+    for (let i = 0; i < 7; i++) {
+        const currentDay = new Date(startDay);
+        currentDay.setDate(startDay.getDate() + i);
+        const dayIndex = currentDay.getDay();
+        const dayName = daysOfWeek[dayIndex];
+        const date = currentDay.getDate();
+        const month = currentDay.toLocaleString('en-US', { month: 'short' }); 
+        
+
+        const weekTh = document.createElement('th');
+        weekTh.textContent = dayName;
+        weekTh.setAttribute('rowspan', '1'); 
+        timeRow.appendChild(weekTh);
+        
+
+        const dateTh = document.createElement('th');
+        dateTh.textContent = `${date} ${month} `;
+        dayRow.appendChild(dateTh);
+    }
+
+
+    thead.appendChild(timeRow);
+    thead.appendChild(dayRow);
+}
+
+function fetchWeekClasses(startDate, class_name = '', instructor_name = '') {
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 6);
+
+    const formattedEndDate = endDate.toISOString().slice(0, 10);
+    const queryParams = new URLSearchParams({
+        start_day: startDate,
+        end_day: formattedEndDate,
+        class_name: class_name,
+        instructor_name: instructor_name
+    }).toString();
+
+    const requestURL = `/get_week_classes?${queryParams}`;
+
+    fetch(requestURL)
+        .then(response => response.json())
+        .then(data => {
+            fillScheduleTable(data, startDate);
+        })
+        .catch(error => console.error('Error fetching classes:', error));
+}
+
+
+
+function fillScheduleTable(classesData, startDate) {
+    const startDay = new Date(startDate);
+    const tbody = document.querySelector('#weekScheduleTable tbody');
+    tbody.innerHTML = ''; 
+
+    const weekDays = Array.from(document.querySelectorAll('#weekScheduleTable thead th')).slice(1).map(th => th.textContent);
+
+    for (let hour = 6; hour <= 19; hour++) {
+        const row = document.createElement('tr');
+        const timeCell = document.createElement('td');
+        timeCell.textContent = `${hour}:00 - ${hour + 1}:00`;
+        timeCell.classList.add('time-cell'); 
+        row.appendChild(timeCell);
+        
+        weekDays.forEach(day => {
+            const cell = document.createElement('td');
+            const dayClasses = classesData.filter(c => c.day.toUpperCase() === day.toUpperCase() && parseInt(c.start_time.split(":")[0], 10) === hour);
+            if (dayClasses.length > 0) {
+                dayClasses.forEach(classInfo => {
+                    const courseDiv = document.createElement('div');
+                    courseDiv.classList.add('course-cell'); 
+                    const courseInfoDiv = document.createElement('div');
+                    courseInfoDiv.classList.add('course-info'); 
+                    courseInfoDiv.innerHTML = `
+                        <div class="course-name">${classInfo.class_name}</div>
+                        <div class="instructor-name">Instructor: ${classInfo.instructor_name}</div>
+                    `;
+                    courseDiv.appendChild(courseInfoDiv);
+                    cell.appendChild(courseDiv);
+
+                    courseDiv.addEventListener('click', function() {
+                        Swal.fire({
+                            title: classInfo.class_name,
+                            html: `
+                                <div>
+                                    <strong>Instructor:</strong> ${classInfo.instructor_name}
+                                </div>
+                                <div>
+                                    <strong>Day:</strong> ${classInfo.day}
+                                </div>
+                                <div>
+                                    <strong>Start Time:</strong> ${classInfo.start_time}
+                                </div>
+                                <div>
+                                    <strong>End Time:</strong> ${classInfo.end_time}
+                                </div>
+                            `,
+                        });
+                    });
+                });
+            } else {
+                cell.textContent = " ";
+            }
+            
+            row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+    }
+}
+
+</script>
+{% endblock %}

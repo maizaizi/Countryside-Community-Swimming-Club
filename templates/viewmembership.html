@@ -1,0 +1,153 @@
+{%extends 'memberhome.html'%}
+{%block subcontent%}
+<div class="container">
+    <!--display the flash message after action-->
+    {% for message in get_flashed_messages() %}            
+    <div class="alert alert-danger text-center my-4" role="alert">
+    <p class="pt-3"><b>{{ message }}</b></p>
+    </div>  
+    {% endfor %}
+    
+    <div>
+        <h3 class="text-center pt-5 mb-5">Membership Status</h3>
+    </div>
+    
+    {%if membership%}
+    <div>
+        <table class="table table-success table-striped table-hover text-center my-3">
+            <thead>
+                <tr>
+                    
+                    <th scope="col">Membership ID</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                {%for key,value in membership.items()%}
+                    <td>{{value}}</td>
+                {%endfor%}
+                    <td><a href="{{url_for('member.renew_membership')}}">
+                        <button type="button" class="btn btn-outline-success fw-bold">Renew</button></a></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger fw-bold" data-bs-toggle="modal" data-bs-target="#confirm"
+                        >Cancel</button></td>
+                            <!-- Button to trigger confirm modal -->
+                        <div class="modal fade" id="confirm" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" style="margin-top: 12%;">
+                                <div class="modal-content  text-center">
+                                    <div class="modal-header ">
+                                        <h5 class="modal-title text-center" id="imageModalLabel">Are you sure to cancel the membership? </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <form action="{{url_for('member.cancel_membership')}}" method="post">
+                                                <button type="button"  data-bs-dismiss="modal" class="btn btn-outline-success fw-bold mx-5">Decide Later</button>
+                                                <input type="hidden" value="{{membership['membership_id']}}" name="membership_id" id="membership_id">
+                                                <button type="submit" class="btn btn-outline-danger fw-bold">Cancel Now</button> 
+                                            </form>
+                                            
+                                        
+                                        </div>
+                                    
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>    
+                </tr>
+            </tbody>  
+        </table> 
+    </div>
+    {%else%}
+    <table class="table table-success table-striped table-hover text-center my-3">
+        <thead>
+            <tr>
+                <td class="fw-bold">You haven't subscribed with us yet</td>
+                <td><a href="{{url_for('member.renew_membership')}}"><button type="button" class="btn btn-outline-success fw-bold">Subscribe Now</button></a></td>
+            </tr>
+        </thead>
+    </table>
+    {%endif%}
+    <div class="row pt-5">
+            <div class="col-3 ">
+                <button type="button" class="btn btn-outline-success fw-bold" id="show-payments">Show My Payments</button>
+            </div>
+            <div id="filter-options" class="not-show col-5 mb-3 ">
+                <div  class="row justify-content-center " >
+                    <label for="filter" class="col-2 col-form-label fw-bold">Filter:</label>
+                    <div class=" col-6">
+                        <select id="filter"  name="filter" class="form-select" aria-label="Default select example" > 
+                            <option selected value="order_by_date">Order by Date</option>
+                            <option  value="subscription">Subscription Payment</option>
+                            <option  value="lesson">Individual Lesson Payment</option> 
+                        </select>  
+                    </div> 
+                </div>
+            </div>
+            
+    </div>
+
+    <div id="payment-table" class="not-show">
+        <table class="table table-success table-striped table-hover text-center my-3">
+            <thead>
+                <tr>
+                    <th scope="col">Payment Date</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for payment in all_payments%}
+                <tr>
+                    <td>{{payment['date']}}</td>
+                    <td>{{payment['type'].capitalize()}}</td>
+                    <td>{{payment['amount']}}</td>
+                    <td>{{payment['payment_status'].capitalize()}}</td>
+                    {%if payment['booking_id'] and payment['payment_status']=='pending'%}
+                    <td><a href="{{ url_for('member.show_payment_form', booking_id=payment['booking_id']) }}" class="btn btn-outline-primary">Pay</a></td>
+                    {%else%}
+                    <td></td>
+                    {%endif%}
+                </tr>
+                {%endfor%}
+            </tbody>   
+        </table> 
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#show-payments').click(function(){
+            $('#payment-table').toggle()
+            $('#filter-options').toggle()
+            if ($('#payment-table').is(':visible')) {
+                $(this).text('Hide My Payments');
+            } else {
+                $(this).text('Show My Payments');
+            }
+        });
+        $('#filter').change(function(){
+            var filter_value = $('#filter').val();
+            $.ajax({
+                url: '/member/payment_filter',
+                type: 'POST',
+                data: {filter: filter_value},
+                success: function(response){
+                    $('#payment-table').empty();
+                    $('#payment-table').html(response);
+                }
+            });
+        });
+       
+       
+    });
+</script>
+{%endblock%}

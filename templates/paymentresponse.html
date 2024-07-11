@@ -1,0 +1,27 @@
+<table class="table table-success table-striped table-hover text-center my-3">
+    <thead>
+        <tr>
+            <th scope="col">Payment Date</th>
+            <th scope="col">Type</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for payment in all_payments%}
+        <tr>
+            <td>{{payment['date']}}</td>
+            <td>{{payment['type'].capitalize()}}</td>
+            <td>{{payment['amount']}}</td>
+            <td>{{payment['payment_status'].capitalize()}}</td>
+            {%if payment['booking_id'] and payment['payment_status']=='pending'%}
+            <td><a href="{{ url_for('member.show_payment_form', booking_id=payment['booking_id']) }}" class="btn btn-outline-primary">Pay</a></td>
+            {%else%}
+            <td></td>
+            {%endif%}
+            
+        </tr>
+        {%endfor%}
+    </tbody>   
+</table> 

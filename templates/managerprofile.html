@@ -1,0 +1,161 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <div class="row">
+            <div class="col-6">
+                <h3 class="text-center pt-5 mb-3">Update Profile</h3>
+                
+                <form action="{{url_for('manager.update_profile')}}" method="post" 
+                class="needs-validation" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="manager_id" class="col-3 col-form-label" hidden><b>Member ID:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="manager_id" name="manager_id" hidden readonly 
+                            value="{{manager['manager_id']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="title" class="col-3 col-form-label"><b>Title:</b></label>
+                        <div class=" col-6">
+                            <select id="title"  name="title"  required class="form-select" aria-label="Default select example" >
+                                <option 
+                                {%if manager['title']=='Mr'%}selected{%endif%} value="Mr">Mr</option>
+                                <option 
+                                {%if manager['title']=='Miss'%}selected{%endif%} value="Miss">Miss</option>
+                                <option 
+                                {%if manager['title']=='Ms'%}selected{%endif%} value="Ms">Ms</option>
+                                <option 
+                                {%if manager['title']=='Mrs'%}selected{%endif%} value="Mrs">Mrs</option>
+                                <option 
+                                {%if manager['title']=='Mx'%}selected{%endif%} value="Ms">Mx</option>
+                                <option 
+                                {%if manager['title']=='None'%}selected{%endif%} value="None">None</option>
+                              </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the title.
+                            </div>  
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="first_name" class="col-3 col-form-label"><b>First Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="first_name" name="first_name" required 
+                            value="{{manager['first_name']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="family_name" class="col-3 col-form-label"><b>Last Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="family_name" name="family_name" required
+                            value="{{manager['family_name']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the family name.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="position" class="col-3 col-form-label"><b>Position:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="position" name="position" required           
+                            value="{{manager['position']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the position.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="phone" class="col-3 col-form-label"><b>Phone:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="phone" name="phone" required           
+                            value="{{manager['phone']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the phone number.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="email" class="col-3 col-form-label"><b>Email:</b></label>
+                        <div class="col-6">
+                            <input type="email" class="form-control" id="email" name="email" required           
+                            value="{{manager['email']}}">
+                            <div class="invalid-feedback text-start">
+                                Please provide a valid email.
+                            </div>  
+                        </div>
+                    </div>
+
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Update Information</button>
+                    </div>    
+                </form>
+            
+            </div>
+            <div class="col-6">
+                <h3 class="text-center pt-5 mb-3">Update Password</h3>
+                <div>
+                <form action="{{url_for('manager.update_password')}}" method="post" class="needs-validation" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="id" class="col-3 col-form-label" hidden><b>Account ID:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="id" name="id" hidden readonly 
+                            value="{{manager['account_id']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="username" class="col-4 col-form-label"><b>User Name:</b></label>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="username" name="username" required disabled 
+                            value="{{manager['username']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="old_password" class="col-4 col-form-label"><b>Old Password:</b></label>
+                        <div class="col-7">
+                            <input type="password" class="form-control" id="old_password" name="old_password" required
+                            placeholder="Old password">
+                            <div class="invalid-feedback text-start">
+                                Please enter the old password.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="new_password" class="col-4 col-form-label"><b>New Password:</b></label>
+                        <div class="col-7">
+                            <input type="password" class="form-control" id="new_password" name="new_password" required
+                            placeholder="New password">
+                            <div class="invalid-feedback text-start">
+                                Please enter the new password.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Update Password</button>
+                    </div>   
+                </form>
+            </div>
+            <div style="text-align: center;">
+                <a href="{{ url_for('manager.manager') }}" class="btn" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">Back</a>
+            </div>
+
+        </div>
+        
+       
+       
+        
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}

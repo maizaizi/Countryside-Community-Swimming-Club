@@ -1,0 +1,93 @@
+{% extends 'managerhome.html'%}
+
+{%block subcontent%}
+<div class="container">
+     <!-- display the flash message after action -->
+     {% for message in get_flashed_messages() %}
+     <div class="alert alert-danger text-center my-4" role="alert">
+         <p class="pt-3"><b>{{ message }}</b></p>
+     </div>
+     {% endfor %}
+     <div>
+         <h3 class="text-center pt-5 mb-5">Pool List</h3>
+     </div>
+     <div>
+        <form action="" method="post" 
+        class="row justify-content-center needs-validation"  novalidate >
+            <div class="col-2">
+                <input class="form-control" type="text" placeholder="Pool Name" name="pool_name"  required>
+                <div class="text-start invalid-feedback">
+                    Please enter pool name.
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-outline-success fw-bold">Add Pool</button>
+            </div>
+        </form>
+        
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-8 ">
+            <table class="table table-success table-striped table-hover text-center my-3">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for pool in all_pools%}
+                    <tr>
+                        {%for key, value in pool.items()%}
+                        <td>{{value}}</td>
+                        {%endfor%}
+                        <td>
+                            <button type="button" class="btn btn-outline-success fw-bold"
+                        data-bs-toggle="modal" data-bs-target="#w{{pool['pool_id']}}">Edit</button>
+                            <div class="modal fade" id="w{{pool['pool_id']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="text-start">
+                                                <form action="{{url_for('manager.edit_pool',id=pool['pool_id'])}}" method="post" 
+                                                     class="needs-validation"  novalidate >
+                                                    <div class="row mb-3 justify-content-center">
+                                                        <label for="{{pool['pool_id']}}" class="col-2 col-form-label"><b>Pool Name:</b></label>
+                                                        <div class="col-3">
+                                                            <input type="text" class="form-control" id="{{pool['pool_id']}}" name="pool{{pool['pool_id']}}" required 
+                                                            value="{{pool['name']}}">
+                                                            <div class="invalid-feedback text-start">
+                                                                Please enter the pool name.
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button type="submit" class="btn btn-outline-primary fw-bold">Confirm</button>
+                                                        </div>
+                                                    </div>   
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+                        </td>
+                            <td><a href="{{url_for('manager.delete_pool',id=pool['pool_id'])}}">
+                                <button type="button" class="btn btn-outline-danger fw-bold">Delete</button></a></td>
+                    </tr>
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <a href="{{ url_for('manager.manager') }}" class="btn" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">Back</a>
+    </div>
+</div>
+{%endblock%}
+

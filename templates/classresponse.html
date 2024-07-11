@@ -1,0 +1,64 @@
+<table class="table table-success table-striped table-hover text-center my-3">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Image</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Price</th>
+            <th scope="col">Capacity</th>
+            {%if show_buttons%}
+            <th scope="col"></th>
+            <th scope="col"></th>  
+            {%else%}
+            <th scope="col"></th> 
+            {%endif%}
+        </tr>
+    </thead>
+    <tbody>
+        {%for class in all_classes%}
+            <tr>
+            {%for key,value in class.items()%}
+            {%if key!='class_id' and key!='description'%}
+                
+                {%if key=='image'%}
+                <!--add a modal wo show instructor image when clicing on the small profile image-->
+                <td><img class="profile_image_small" src="{{url_for('static',filename='images/'+value)}}" alt="{{value}}"
+                    data-bs-toggle="modal" data-bs-target="#w{{class['class_id']}}"></td>
+                    <div class="modal fade" id="w{{class['class_id']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="imageModalLabel">{{class['name']}}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <p><span  class="fw-bold">Description: </span>{{class['description']}}</p>  
+                                    </div>
+                                    <img src="{{url_for('static',filename='images/'+class['image'])}}" alt="{{class['image']}}" class="img-fluid">
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {%else%} 
+                        <td>{{value}}</td>
+                    {%endif%}
+                {%endif%}
+                {%endfor%}
+
+                {%if show_buttons%}
+                <td><a href="{{url_for('manager.edit_class',class_id=class['class_id'])}}">
+                    <button type="button" class="btn btn-outline-success fw-bold">Edit</button></a></td>
+                <td><a href="{{url_for('manager.delete_class',class_id=class['class_id'])}}">
+                    <button type="button" class="btn btn-outline-danger fw-bold">Delete</button></a></td>
+                {%else%}
+                <td><a href="{{url_for('manager.active_class',class_id=class['class_id'])}}"><button type="button" class="btn btn-outline-success fw-bold">Active</button></a></td>
+                {%endif%}
+            </tr>
+            {%endfor%}
+            
+          
+    </tbody>  
+</table> 

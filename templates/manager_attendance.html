@@ -1,0 +1,50 @@
+{% extends 'managerhome.html' %}
+
+{% block subcontent %}
+<div class="container py-5">
+    <h3 class="text-center mb-4">Record Member Attendance</h3>
+    <h5 class="text-center"> Select the members who attended and save the changes to mark their attendance</h5>
+
+
+    <!-- Button Row -->
+    <div class="row justify-content-between mb-3">
+        <div class="col-auto">
+            <button type="submit" form="attendanceForm" class="btn btn-outline-success fw-bold">Save Changes</button>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('manager.list_schedules') }}" class="btn btn-outline-success fw-bold">Return to Timetable</a>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <form id="attendanceForm" method="POST">
+                <table class="table table-success table-hover table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">Attended</th>
+                            <th scope="col">Class date</th>
+                            <th scope="col">Member Name</th>
+                            <th scope="col">Health Information</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="attendance_{{ member.booking_id }}" value="1" {{ 'disabled' if member.class_date > current_date }}{{ 'checked' if member.attended else '' }}>
+                            </td>
+                            <td>{{ member.class_date }}</td>
+                            <td>{{ member.first_name }} {{ member.family_name }}</td>
+                            <td>{{ member.health_info }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- The Save Changes button is moved to the top button row -->
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

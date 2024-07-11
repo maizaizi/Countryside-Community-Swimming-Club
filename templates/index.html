@@ -1,0 +1,130 @@
+{% extends 'home.html' %}
+{% block subcontent %}
+
+<div class="home-background">
+    <div style="position:absolute;top:40%; right:50px;">
+        <div style="height:170px;background-color: #0f93adb8;display: flex;justify-content: center;  align-items: center; padding:30px">
+            <h1 style="color:aliceblue; font-size:2em;" class="navbar-brand">Welcome to the Countryside Swimming club</h1>
+        </div>
+    </div>  
+</div>
+
+<div class="container">
+    <div class='d-flex justify-content-around' style="height:400px;align-items: center;">
+        <div class="col-5">
+            <p class="fw-bolder" style="font-family:Anton; font-size:xx-large;">WE'RE A HIGH QUALITY SWIM CLUB DEDICATED TO AQUA AROBICS FITNESS & SWIMMING SKILLS.</p>
+        </div>
+        <div class="col-4 fw-bold">
+            <p>Enjoy the serenity of swimming in natural surroundings, away from crowded city pools.</p>
+            <p>Receive personalized swimming lessons and training sessions tailored to your skill level and goals.</p>
+        </div>
+    </div>
+
+    <div id="introduction">
+        <div class="d-flex">
+            <div class="col-md-7 d-flex justify-content-around" style="background-color: #007bff;align-items: center;padding:30px; ">
+                <p class="text-white fw-bold">The Countryside Community Swimming Club is a charming establishment nestled in a serene rural township, catering exclusively to the local rural community. Managed and operated by members of the local community, the club serves as a hub for recreational swimming activities and fitness endeavors.</p>
+            </div>
+            <div class="col-md-5">
+                <img src="{{ url_for('static', filename='images/swimlesson.jpg') }}" alt="Introduction Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" style="background-color: #007bff; padding: 20px; color: white;">
+        <h2 class="text-center mb-4">Our Classes</h2>
+        <div id="classes-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for index, class_info in classes %}
+                {% if index % 3 == 0 %}
+                <div class="carousel-item {% if index == 0 %}active{% endif %}">
+                    <div class="row">
+                        {% endif %}
+                        <div class="col-md-4">
+                            <a href="{{ url_for('guest.show_class', class_id=class_info['id']) }}" onclick="getClassId(this)">
+                                <div class="class-item border border-white p-3 mb-4 h-100" style="background-color: #007bff;">
+                                    <img src="{{ url_for('static', filename='images/' + class_info['image']) }}" alt="{{ class_info['name'] }}" class="img-fluid mx-auto d-block mb-3" style="width: 200px; height: 200px;">
+                                    <h3 class="text-center" style="color: white;">{{ class_info['name'] }}</h3>
+                                </div>
+                            </a>
+                        </div>
+                        {% if index % 3 == 2 or loop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <hr class="bg-white" style="border-top: 4px solid white; margin: 20px 0 0;">
+            <button class="carousel-control-prev" type="button" data-bs-target="#classes-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#classes-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    
+
+    
+    
+    
+    
+    
+       
+    
+    
+    <div class="container" style="background-color: #ffffff; padding: 20px; color: black;">
+        <h2 class="text-center mb-4">Our Instructors</h2>
+        <div id="instructors-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for instructor_info in instructors %}
+                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-md-4 px-2"> 
+                            <img src="{{ url_for('static', filename='images/' + instructor_info.image) }}" alt="{{ instructor_info.first_name }}" class="img-fluid rounded-circle">
+                        </div>
+                        <div class="col-md-8 px-2"> 
+                            <h3>{{ instructor_info.first_name }} {{ instructor_info.family_name }}</h3>
+                            <p><strong>Expertise Area:</strong> {{ instructor_info.expert_area }}</p>
+                            <p>{{ instructor_info.profile }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#instructors-carousel" data-bs-slide="prev" style="background-color: transparent; bottom: 20px; left: 20px;">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="color: #007bff;"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#instructors-carousel" data-bs-slide="next" style="background-color: transparent; bottom: 20px; right: 20px;">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="color: #007bff;"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    
+  
+    <footer style="background-color: #007bff; color: white;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="{{url_for('guest.home')}}"><img class="logo" src="{{url_for('static',filename='images/logo.jpg')}}" alt="Countryside Swimming Club" style="width: 280px; height: 150px;"></a>
+                </div>
+                <div class="col-md-4">
+                    <p>Our Address：<br>459 Cashel Street<br>Linwood, Christchurch 801</p>
+                    <p><a href="findus" style="color: white;">Find Us</a></p>
+                </div>
+                <div class="col-md-4">
+                    <p>Our Phone number ：<br>Phone: (0064)08-666-8888</p>
+                    <p><a href="contact" style="color: white;">Email us: <br> bright.tech.ap@gmail.com</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+
+{% endblock %}

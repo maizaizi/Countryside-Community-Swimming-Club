@@ -1,0 +1,117 @@
+{% extends 'managerhome.html' %}
+
+{% block subcontent %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Statement Report </title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Center the content */
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Set the height to full viewport height */
+            flex-direction: column; /* Arrange elements in a column */
+        }
+
+        /* Style the container */
+        .content-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 1000px; /* Set maximum width for the container */
+            width: 100%; /* Make the container responsive */
+            background-color: #f9f9f9;
+            text-align: center; /* Center text within the container */
+        }
+
+        /* Style the back button */
+        .back-btn {
+            margin-top: 20px; /* Add margin to the top of the button */
+        }
+
+        /* Style for chart */
+        #classChart {
+            margin-top: 20px; /* Add margin to separate from the header */
+        }
+        
+        /* Style for chart scale labels */
+        .chart-scale-label {
+            font-style: normal; /* Set font style to normal (not italic) */
+            word-wrap: break-word; /* Enable automatic line wrapping */
+        }
+    </style>
+</head>
+<body>
+    <div class="center-container">
+        <div class="content-container">
+            <h1>Class Statement Report </h1>
+            <canvas id="classChart" width="800" height="400"></canvas>
+            <div class="back-btn">
+                <a href="{{ url_for('manager.manager') }}" class="btn" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">Back</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Extract class names and booking counts from Flask
+        var classNames = {{ class_names | tojson }};
+        var bookingCounts = {{ booking_counts | tojson }};
+
+        // Create data for the bar chart
+        var classData = {
+            labels: classNames,
+            datasets: [{
+                label: 'Number of Bookings',
+                data: bookingCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // Get the canvas element
+        var ctx = document.getElementById('classChart').getContext('2d');
+
+        // Create the bar chart
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: classData,
+            options: {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Number of Bookings'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 10 
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Class Name'
+                        }
+                    }]
+                }
+            }
+        });
+        
+        // Update scale labels to disable italic and enable line wrapping
+        Chart.scaleService.updateScaleDefaults('category', {
+            ticks: {
+                callback: function(value) {
+                    return value;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

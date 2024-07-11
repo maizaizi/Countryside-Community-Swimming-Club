@@ -1,0 +1,50 @@
+{% extends 'managerhome.html' %}
+{% block subcontent %}
+<div class="container">
+    <!-- display the flash message after action -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+    </div>
+    {% endfor %}
+    <div>
+        <h3 class="text-center pt-5 mb-5">Add News</h3>
+    </div>
+    <form action="{{ url_for('manager.add_news') }}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+        <div class="row mb-3 justify-content-center">
+            <label for="title" class="col-3 col-form-label"><b>Title:</b></label>
+            <div class="col-6">
+                <input type="text" class="form-control" id="title" name="title" required placeholder="Title">
+                <div class="invalid-feedback text-start">
+                    Please enter the title.
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 justify-content-center">
+            <label for="content" class="col-3 col-form-label"><b>Content:</b></label>
+            <div class="col-6">
+                <textarea class="form-control" id="content" name="content" required placeholder="Content"></textarea>
+                <div class="invalid-feedback text-start">
+                    Please enter the content.
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 justify-content-center">
+            <label for="publish_date" class="col-3 col-form-label"><b>Publish Date:</b></label>
+            <div class="col-6">
+                <input type="date" class="form-control" id="publish_date" name="publish_date" required>
+                <div class="invalid-feedback text-start">
+                    Please select the publish date.
+                </div>
+            </div>
+        </div>
+        <div class="text-center py-3">
+            <input type="hidden" name="add_news">
+            <button type="submit" class="btn btn-outline-success">Add News</button>
+        </div>
+    </form>
+    <div style="text-align: center;">
+        <a href="{{ url_for('manager.manager') }}" class="btn" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">Back</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{%extends 'instructorhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <!--list all the instructors-->
+        <div>
+            <h3 class="text-center pt-5 mb-3">View Availability</h3>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <a href="{{url_for('instructor.add_time_schedule')}}"><button type="button" class="btn btn-outline-success fw-bold">Add Available Time</button></a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8" >
+                <table class="table table-success table-hover table-striped text-center my-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Day Of Week</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">End Time</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for time in available_time%}
+                        <tr>
+                        {%for key,value in time.items()%}
+                            {%if key!='id'%}
+                            <td>{{value}}</td>
+             
+                        {%endif%}
+                        {%endfor%}
+                        <td><a href="{{url_for('instructor.edit_time_schedule',id=time['id'])}}"><button type="button" class="btn btn-outline-success fw-bold">Edit</button></a></td>
+                        <td><a href="{{url_for('instructor.delete_time_schedule',id=time['id'])}}"><button type="button" class="btn btn-outline-danger fw-bold">Delete</button></a></td>
+                    </tr>
+                    {%endfor%}
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+       
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}

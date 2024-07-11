@@ -1,0 +1,47 @@
+{% extends 'home.html' %}
+
+{% block subcontent %}
+  <div style="margin-top: 150px;">
+    <h2 style="color: rgb(227, 236, 237); padding: 10px; text-align: center;">
+      <span style="color: black; padding-bottom: 5px;">Contact Us</span>
+    </h2>
+    <div class="container">
+      {% if success %}
+        <p>Thank you for your message. We'll get back to you shortly.</p>
+      {% else %}
+        <form action="{{ url_for('guest.contact') }}" method="POST">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+            {% for error in form.name.errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control") }}
+            {% for error in form.email.errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.subject.label }}
+            {{ form.subject(class="form-control") }}
+            {% for error in form.subject.errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.message.label }}
+            {{ form.message(class="form-control") }}
+            {% for error in form.message.errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

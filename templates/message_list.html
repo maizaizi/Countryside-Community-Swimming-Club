@@ -1,0 +1,85 @@
+{%extends 'memberhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <!--list all the messages-->
+        <div>
+            <h3 class="text-center pt-5 mb-5">Messages List</h3>
+        </div>
+       
+        <div >
+            <table class="table table-success table-striped table-hover text-center my-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Number</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">Date</th>                      
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for message in all_messages%}
+                    <tr class="reminder-message {%if message['status']=='unread'%} fw-bold {%endif%}"
+                    data-bs-toggle="modal" data-bs-target="#w{{message['number']}}" data-value="{{message['id']}}">
+                        {%for key,value in message.items()%}
+                        {%if key !='id' and key!='status'%}
+                            {%if key=='content'%}
+                            <td class="">{{value|truncate(50)|safe}}</td>
+                            {%else%}
+
+                            <td class="">{{value}}</td>
+                            {%endif%}
+                        {%endif%}
+                        {%endfor%}
+        
+                        <!-- to trigger modal -->
+                        <div class="modal fade" id="w{{message['number']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" style="margin-top: 12%;">
+                                <div class="modal-content  text-center">
+                                    <div class="modal-header ">
+                                        <h5 class="modal-title text-center" id="imageModalLabel">{{message['title']}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start">
+                                            <p>{{message['content']|safe}}</p>
+                                        </div>
+                                        <div>
+                                            {%if 'Membership' in message['title']%}
+                                            <a href="{{url_for('member.view_membership')}}"><button type="button" class="btn btn-outline-success fw-bold mx-5">Renew Now</button></a>
+                                            {%elif 'Payment' in message['title'] %}
+                                            <a href="{{url_for('member.my_booking')}}"><button type="button" class="btn btn-outline-success fw-bold mx-5">Pay Now</button></a>
+                                            {%endif%}
+                                                <a href="{{url_for('member.delete_message',id=message['id'])}}"><button type="submit" class="btn btn-outline-danger fw-bold">Delete message</button> </a>
+                                        </div>
+                                    
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </tr>   
+                    {%endfor%}
+                </tbody>
+            </table> 
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.reminder-message').click(function(){
+                $(this).removeClass('fw-bold')
+                var message_id_value= $(this).data("value");
+                $.ajax({
+                    url: '/member/mark_message_read',
+                    type: 'POST',
+                    data: {message_id:message_id_value},
+                });
+            });
+        });
+    </script>   
+{%endblock%}

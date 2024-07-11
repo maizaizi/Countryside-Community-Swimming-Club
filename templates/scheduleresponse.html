@@ -1,0 +1,40 @@
+
+<table class="table table-success table-striped table-hover text-center my-3">
+    <thead>
+        <tr>
+            <th scope="col">Day of Week</th>
+            <th scope="col">Class Name</th>
+            <th scope="col">Start Time</th>
+            <th scope="col">End Time</th>
+            <th scope="col">Pool</th>
+            <th scope="col">Lane</th>
+            <th scope="col">Instructor Name</th>
+            {%if show_buttons%}
+            <th scope="col"></th>
+            <th scope="col"></th> 
+            <th scope="col"></th> 
+            {%endif%}
+        </tr>
+    </thead>
+    <tbody>
+        {%for schedule in all_schedules%}
+            <tr>
+            {%for key,value in schedule.items()%}
+                {%if key!='schedule_id'%}
+                <td>{{value}}</td>
+                {%endif%}
+                {%endfor%}
+
+                {%if show_buttons%}
+                <td><a href=""><button type="button" class="btn btn-outline-success fw-bold">Edit</button></a></td>
+                <td><a href="{{url_for('manager.delete_schedule',schedule_id=schedule['schedule_id'])}}">
+                    <button type="button" class="btn btn-outline-danger fw-bold">Delete</button></a></td>
+                <td><a href="{{url_for('manager.booking_info',schedule_id=schedule['schedule_id'])}}">
+                    <button type="button" class="btn btn-success fw-bold">View Booking Details</button></a></td>
+                {%endif%}
+            </tr>
+            {%endfor%}
+            
+          
+    </tbody>  
+</table> 

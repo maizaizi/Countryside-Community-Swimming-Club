@@ -1,0 +1,60 @@
+{% extends 'managerhome.html' %}
+
+{% block subcontent %}
+    <div class="container">
+        <!-- Display the flash message after action -->
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger text-center my-4" role="alert">
+                <p class="pt-3"><b>{{ message }}</b></p>
+            </div>
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h3 class="text-center pt-5 mb-3">Class Detail: {{ this_class['name'] }}</h3>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Class Name:</b> {{ this_class['name'] }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Type:</b> {{ this_class['type'] }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Description:</b> {{ this_class['description'] }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Duration (Mins):</b> {{ this_class['duration'] }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Price ($):</b> {{ this_class['price'] }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Capacity:</b> {{ this_class['capacity'] }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <p><b>Current Image:</b></p>
+                        <img class="col-12" src="{{ url_for('static', filename='images/' + this_class['image']) }}" alt="{{ this_class['image'] }}">
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-12">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Register & Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

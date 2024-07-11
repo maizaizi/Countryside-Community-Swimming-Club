@@ -1,0 +1,183 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <h2 class="my-5 text-center">Add Schedule</h2>
+                <form action="{{url_for('manager.schedule_class')}}" method="post" class="needs-validation" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="dayofweek" class="col-3 col-form-label"><b>Day of Week:</b></label>
+                        <div class=" col-8">
+                            <select id="dayofweek"  name="dayofweek"  required class="form-select" aria-label="Default select example" >
+                                <option   disabled selected value>Please select the day</option>
+                                <option value="monday">Monday</option>
+                                <option value="tuesday">Tuesday</option>
+                                <option value="wednesday">Wednesday</option>
+                                <option value="thursday">Thursday</option>
+                                <option value="friday">Friday</option>
+                                <option value="saturday">Saturday</option>
+                                <option value="sunday">Sunday</option>
+                              </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the day.
+                            </div>  
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="class_id" class="col-3 col-form-label"><b>Class:</b></label>
+                        <div class=" col-8">
+                            <select id="class_id"  name="class_id"  required class="form-select" aria-label="Default select example" >
+                                <option   disabled selected value>Please select the class</option>
+                                {%for class in all_classes%}
+                                    <option value="{{class['class_id']}}">{{class['name']}}</option>
+                                {%endfor%}
+                              </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the class.
+                            </div>  
+                        </div>   
+                    </div> 
+
+                    <div class="row mb-3 justify-content-center">
+                        <label for="start_time" class="col-3 col-form-label"><b>Start Time:</b></label>
+                        <div class=" col-8">
+                            <select id="start_time"  name="start_time"  required class="form-select" aria-label="Default select example" >
+                                <option   disabled selected value>Please select the start time</option>
+                                {%for time in timeslots%}
+                                <option value="{{time}}">{{time}}</option>
+                                {%endfor%}
+                            </select>
+                            <div class="invalid-feedback text-start">
+                                Please select the start time.
+                            </div>  
+                        </div> 
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="end_time" class="col-3 col-form-label"><b>End Time:</b></label>
+                        <div class=" col-8">
+                            <select id="end_time"  name="end_time"  required class="form-select" aria-label="Default select example" >
+                                <option id="end_time_option" ></option>
+                            </select>
+                            <div class="invalid-feedback text-start">
+                                Please select the class and start time.
+                            </div>  
+                        </div>
+                    </div>
+                    <div  class="row mb-3 justify-content-center">
+                        <label for="pool" class="col-3 col-form-label"><b>Pool:</b></label>
+                        <div class=" col-8">
+                            <select id="pool"  name="pool"  required class="form-select" aria-label="Default select example" > 
+                                <option   disabled selected value>Please select the pool</option>
+                                {%for pool in all_pools%}
+                                <option value="{{pool['pool_id']}}">{{pool['name']}}</option>
+                                {%endfor%}
+                            </select>
+                            <div class="invalid-feedback text-start">
+                                Please select the pool.
+                            </div>  
+                            <div id="pool_alert" class="fw-bold"></div>
+                        </div> 
+                    </div>
+                    <div  class="row mb-3 justify-content-center not-show" id="show_lane">
+                        <label for="lane" class="col-3 col-form-label"><b>Lane:</b></label>
+                        <div class=" col-8">
+                            <select id="lane"  name="lane"  class="form-select" aria-label="Default select example" >
+                                
+                            </select>
+                            <div class="invalid-feedback text-start">
+                                Please select the <span class="fw-bold">Top Three</span> options first.
+                            </div>  
+                            <div id="pool_alert" class="fw-bold"></div> 
+                        </div> 
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="instructor" class="col-3 col-form-label"><b>Instructor:</b></label>
+                        <div class=" col-8">
+                            <select id="instructor"  name="instructor"  required class="form-select" aria-label="Default select example" >
+                               
+
+                            </select>
+                            <div class="invalid-feedback text-start">
+                                Please select the <span class="fw-bold">Top Three</span> options first.
+                            </div>  
+                            <div id="alert" class="fw-bold"></div>
+                        </div> 
+                    </div>
+                    
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Add Schedule</button>
+                    </div>   
+                </form>
+
+            </div>
+        </div>
+       
+   </div>
+
+<script>
+        $(document).ready(function(){
+            $('#dayofweek,#class_id,#start_time,#pool').change(function(){
+                var dayofweek_value = $('#dayofweek').val();
+                var class_id_value = $('#class_id').val();
+                var start_time_value = $('#start_time').val();
+                var pool_value = $('#pool').val();
+                $.ajax({
+                    url: '/manager/response_data',
+                    type: 'POST',
+                    data: {dayofweek: dayofweek_value, class_id: class_id_value,start_time:start_time_value,pool:pool_value},
+                    success: function(response){
+                        $('#end_time_option').html(response['end_time']).val(response['end_time']);
+                        $('#instructor').empty();
+                        $('#alert').empty();
+                        $('#lane').empty();
+                        $('#lane_alert').empty();
+                        $('#pool_alert').empty();
+                        var instructors= response['instructor'];
+                        if (instructors==='none'){
+                            $('#alert').html('No instructor available at this time slot. <br>\
+                            Please select another time!')
+                        }else
+                        {$.each(instructors, function(index, instructor) {
+                            $('#instructor').append($('<option>', {
+                              value: instructor.instructor_id,
+                              text: instructor.first_name + ' ' + instructor.family_name
+                            }));
+                        });}
+
+                        var msg=response['alert']
+                        if(msg){
+                            $('#pool_alert').html(msg)
+                        }
+                        
+                        var has_lane= response['has_lane'];
+                        var lanes= response['lanes'];
+                        if (!has_lane){
+                            $('#show_lane').addClass('not-show');
+                            $('#lane').removeAttr('required');
+                        }else if(has_lane){
+                            $('#show_lane').removeClass('not-show');
+                            $('#lane').prop('required',true);
+                            if (!lanes){
+                            $('#lane_alert').html('No lane available at this time slot. <br>\
+                            Please select another time!')
+                        }else
+                        {$.each(lanes, function(index, lane) {
+                            $('#lane').append($('<option>', {
+                              value: lane.lane_id,
+                              text: 'Lane ' + lane.lane_id
+                            }));
+                        });}  
+                        }
+
+                    }
+                });
+            });
+        });
+    </script>
+{%endblock%}

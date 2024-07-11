@@ -1,0 +1,49 @@
+{% extends 'base.html'%}
+
+{%block content%}
+<div class="up-padding">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top ">
+        <div class="container">
+            <a   href="{{url_for('guest.home')}}"><img class="logo" src="{{url_for('static',filename='images/logo.jpg')}}" alt="Countryside Swimming Club"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-2">
+                        <a href="{{url_for('guest.home')}}"
+                            class="nav-link" >Home</a>  
+                    </li>
+                    <li class="nav-item me-2">
+                        <a href="{{url_for('manager.manager')}}"
+                            class="nav-link {%if active=='dashboard'%} active {%endif%}" 
+                            >Dashboard</a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <a href="{{url_for('manager.list_schedules')}}"
+                            class=" nav-link {%if active=='schedule'%} active {%endif%}"  
+                            >Timetable</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {%if active=='account'%} active {%endif%}"
+                        href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Hello Manager
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li><a class="dropdown-item" href="{{url_for('manager.profile')}}">Profile</a></li>
+                          <li><a class="dropdown-item" href="{{url_for('manager.profile')}}">Change Password</a></li>
+                          <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Log Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    {%block subcontent%}
+    {%endblock%}
+
+</div>
+
+
+{%endblock%}

@@ -1,0 +1,17 @@
+{% extends 'home.html' %}
+{% block subcontent %}
+  <div class="container" style="margin-top: 150px;">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body text-center">
+            <h2 class="card-title">Thank you for your message. We'll get back to you shortly.</h2>
+            <div>
+              <a href="{{ url_for('guest.home') }}" class="btn btn-primary">Return to Home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

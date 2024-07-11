@@ -1,0 +1,108 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h3 class="text-center pt-5 mb-3">Add New Class</h3>
+                
+                <form action="{{url_for('manager.add_class')}}" method="post" 
+                class="needs-validation" enctype="multipart/form-data" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="name" class="col-3 col-form-label"><b>Class Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="name" name="name" required 
+                            placeholder="Class Name">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="type" class="col-3 col-form-label"><b>Type:</b></label>
+                        <div class=" col-6">
+                            <select id="type"  name="type"  required class="form-select" aria-label="Default select example" >
+                                <option   disabled selected value>Please select the class type</option>
+                                <option value="Group Class">Group Class</option>
+                                <option value="Individual Lesson">Individual Lesson</option>
+                              </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the class type.
+                            </div> 
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="description" class="col-3 col-form-label"><b>Description:</b></label>
+                        <div class="col-6">
+                            <textarea class="form-control " id="description" rows="4" name="description" required placeholder="Please enter the description"></textarea>
+                            <div class="invalid-feedback text-start">
+                                Please enter the class description.
+                            </div> 
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3 justify-content-center">
+                        <label for="duration" class="col-3 col-form-label"><b>Duration (Mins):</b></label>
+                        <div class="col-6">
+                            <input type="number" class="form-control" id="duration" name="duration" required           
+                             step="15" min="0" placeholder="60">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class duration.
+                            </div>  
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-3 justify-content-center">
+                        <label for="price" class="col-3 col-form-label"><b>Price ($):</b></label>
+                        <div class="col-6">
+                            <input type="number" class="form-control" id="price" name="price" required           
+                            placeholder="0" min="0">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class price.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="capacity" class="col-3 col-form-label"><b>Capacity:</b></label>
+                        <div class="col-6">
+                            <input type="number" class="form-control" id="capacity" name="capacity" required           
+                            placeholder="1" min="1">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class capacity.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="image" class="col-3 col-form-label"><b>Image:</b></label>
+                        <div class="col-6">
+                            <input type="file" class="form-control" id="image" name="image" required>
+                            <div class="invalid-feedback text-start">
+                                Please upload image in type of jpg, png, and jpeg.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Add Class</button>
+                    </div>    
+                </form>
+            
+            </div>
+            
+        </div>
+        
+       
+       
+        
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}

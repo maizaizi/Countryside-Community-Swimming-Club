@@ -1,0 +1,484 @@
+.table-overflow {
+    overflow-x: auto;
+}
+
+.profile_image_small {
+    width: 120px;
+    height: 60px;
+}
+
+td, th {
+    vertical-align: middle;
+}
+
+table {
+    text-align: center;
+}
+
+.not-show {
+    display: none;
+}
+
+.up-padding {
+    padding-top: 100px;
+}
+
+/* Background Styles */
+
+.home-background {
+    background: url(/static/images/swim-girl.png) no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.login-page,
+.register-page {
+    background-image: url('/static/images/login-background.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container Styles */
+
+.login-container,
+.register-container {
+    margin-top: 90px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* Increased padding for the login container */
+    width: 300px; /* Adjusted width for the login container */
+}
+
+.register-container {
+    width: 600px;
+}
+
+/* Title Styles */
+
+.login-title,
+.register-page {
+    text-align: center;
+    margin-bottom: 2em; /* Increased margin for the register page */
+}
+
+/* Form Styles */
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Button Styles */
+
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Alert Styles */
+
+.alert {
+    padding: 10px;
+    background-color: #f44336;
+    color: white;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Navbar Styles */
+
+.navbar {
+    background-color: #28a745;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-item .btn-outline-light {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-nav .nav-item .btn-outline-light:hover,
+.navbar-nav .nav-item .btn-outline-light:focus,
+.navbar-nav .nav-item .btn-outline-light.active {
+    color: #28a745;
+    background-color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+    padding: 8px 10px;
+}
+
+/* Responsive Navbar Styles */
+
+@media (max-width: 992px) {
+    .navbar-collapse {
+        background-color: #28a745;
+    }
+
+    .navbar-nav .nav-item {
+        margin-bottom: 10px;
+    }
+}
+
+/* Modal Styles */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.modal-content {
+    text-align: left;
+}
+
+.modal-content img {
+    max-width: 100%;
+}
+
+.attendee-checkbox:checked ~ .modal {
+    display: block;
+}
+
+/* Address Suggestions Styles */
+
+.address-suggestion {
+    list-style: none;
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    margin: 0;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.address-suggestion:hover {
+    color: rgb(44, 151, 184);
+}
+
+/* Logo Styles */
+
+.logo {
+    width: 140px;
+}
+
+.card-logo {
+    width: 4em;
+}
+
+/* Circle Styles */
+
+.circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #3ec37e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+}
+
+.circle:hover {
+    background-color: #51a4a2;
+    cursor: pointer;
+}
+
+.circle.active {
+    background-color: #c15153;
+}
+
+/* Rectangle Heading Styles */
+
+.rectangle-heading {
+    background-color: #58ab8e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* Circle Container Styles */
+
+.circle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Card Styles */
+
+.card {
+    background-color: #73e38d5e;
+}
+
+.card-body {
+    transition: background-color 0.5s ease;
+}
+
+.card-body:hover {
+    background-color: #cccccc;
+}
+
+.manage-btn {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.card-body:hover .manage-btn {
+    opacity: 1;
+}
+
+/* Navbar Link Styles */
+
+.navbar-nav .nav-link:hover {
+    color: #0c0c0c;
+}
+
+.navbar .nav-link.active {
+    color: #f8a1a1;
+}
+
+/* Reminder Message Styles */
+
+.reminder-message:hover {
+    cursor: pointer;
+}
+
+.reminder-message:hover td {
+    color: #d24a61;
+}
+
+/* Weekday Styles */
+
+.week-selector-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.weekdays {
+    display: flex;
+    margin: 0 10px;
+}
+
+.day {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.week-btn {
+    border: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.week-btn:hover {
+    background-color: #0056b3;
+}
+.weekdays .day.active {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+}
+/* Alert Container Styles (Added from Second File) */
+
+.alert-container {
+    position: fixed;
+    top: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 80%;
+    max-width: 500px;
+}
+/*
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 20px;
+}
+
+.table thead th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    padding: 10px;
+    text-align: center;
+}
+
+.table tbody td {
+    background-color: #fff;
+    color: #212529;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 5px;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+*/
+
+
+.table img {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+}
+.modal-body img{
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+}
+
+.btn {
+    font-size: 0.875rem;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: 500;
+}
+
+.btn-outline-primary {
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.alert {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 0.875rem;
+}
+
+.table-container {
+    width: 100%; 
+    max-width: 900px; 
+    margin: auto;
+    overflow-x: auto; 
+}
+.course-name {
+    font-weight: bold; 
+}
+
+.time-cell {
+    width: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.course-cell {
+    padding: 5px;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    cursor: pointer; 
+}
+.course-cell:hover {
+    background-color: #eaeaea; 
+}
+.course-cell {
+    font-size: 5px; 
+}
+
+.course-info {
+    font-size: 15px;
+}
+
+.class-info {
+    display: inline-block;
+    margin-right:10px;
+}
+
+
+.table-fixed thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+
+.table-fixed th {
+    z-index: 1;
+}
+
+.table-container td {
+    width: px; 
+}
+
+
+.table th,
+.table td {
+    text-align: center; 
+}
+.instructor-name {
+    
+    color: rgb(11, 139, 96);
+}

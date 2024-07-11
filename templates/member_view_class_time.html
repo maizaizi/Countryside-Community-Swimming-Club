@@ -1,0 +1,46 @@
+{% extends 'memberhome.html' %}
+
+{% block subcontent %}
+<div class="container">
+    <!-- Display flash messages -->
+    {% for message in get_flashed_messages() %}            
+    <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+    </div>  
+    {% endfor %}
+    <!-- Class Times -->
+    <div>
+        <h3 class="text-center pt-5 mb-5">Class Times</h3>
+    </div>
+    <div id="class-times-table">
+        <table class="table table-success table-striped table-hover text-center my-3">
+            <thead>
+                <tr>
+                    <th scope="col">Day</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Pool</th>
+                    <th scope="col">Lane</th>
+                    <th scope="col">Actions</th> <!-- New column for actions -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for class_time in class_times %}
+                <tr>
+                    <td>{{ class_time.day }}</td>
+                    <td>{{ class_time.start_time }}</td>
+                    <td>{{ class_time.end_time }}</td>
+                    <td>{{ class_time.pool_id }}</td>
+                    <td>{{ class_time.lane_id }}</td>
+                    <td>
+                        <form action="{{ url_for('member.book_class', schedule_id=class_time.schedule_id) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Book</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>  
+        </table> 
+    </div>
+</div>
+{% endblock %}

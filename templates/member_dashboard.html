@@ -1,0 +1,84 @@
+{% extends 'memberhome.html'%}
+
+{%block subcontent%}
+<div class="container">
+    <div class="row my-5">
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Instructors</h5>
+                        <a href="{{url_for('member.view_instructors')}}"><button class="manage-btn btn btn-sm btn-outline-success">View</button></a>
+                    </div>
+                    <p class="card-text">View Instructors</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Classes</h5>
+                        <a href="{{url_for('member.view_class')}}"><button class="manage-btn btn btn-sm btn-outline-success">View</button></a>
+                    </div>
+                    <p class="card-text">View Classes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">My Bookings</h5>
+                        <a href="{{url_for('member.my_booking')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View and Manage</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Membership</h5>
+                        <a href="{{url_for('member.view_membership')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View and Manage</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Messages</h5>
+                        <a href="{{url_for('member.view_message')}}"><button class="manage-btn btn btn-sm btn-outline-success">View</button></a>
+                    </div>
+                    <p class="card-text"><span class="fw-bold">{{unread_number.number}} &nbsp&nbsp&nbsp 
+                        {%if unread_number.number%}
+                        <i class="fa-solid fa-envelope fa-beat fa-xl"></i>
+                        {%else%}
+                        <i class="fa-solid fa-envelope fa-xl"></i>
+                        {%endif%}
+                    </span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">News</h5>
+                        <a href="{{url_for('member.view_news')}}"><button class="manage-btn btn btn-sm btn-outline-success">View</button></a>
+                    </div>
+                    <p class="card-text">View News</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{%endblock%}
+

@@ -1,0 +1,55 @@
+{% extends 'managerhome.html' %}
+
+{% block subcontent %}
+    <div class="container mt-5"> <!-- Add top margin -->
+        <h1>Income Statement</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Total Income (Default for Current Year)</h3>
+                <p>Total income: ${{ total_income }}</p>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <h3>Income for a Specific Period</h3>
+                    <form method="POST" action="{{ url_for('manager.income_statement') }}">
+                        <label for="start_date">Start Date:</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date">
+                        <label for="end_date">End Date:</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date">
+                        <br>
+                        <br> 
+                        <button type="submit" class="btn btn-primary">Calculate Income</button>
+                        <br>
+                        <br> 
+                        <div style="text-align: center;">
+                            <a href="{{ url_for('manager.manager') }}" class="btn" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <h3>Income Breakdown</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total Amount</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lesson</td>
+                    <td>${{ total_lesson }}</td>
+                    <td>{{ (total_lesson / total_income * 100) | round(2) }}%</td>
+                </tr>
+                <tr>
+                    <td>Subscription</td>
+                    <td>${{ total_subscription }}</td>
+                    <td>{{ (total_subscription / total_income * 100) | round(2) }}%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

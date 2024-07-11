@@ -1,0 +1,197 @@
+
+{% extends 'memberhome.html' %}
+
+{% block subcontent %}
+
+    <div class="container">
+        {% if get_flashed_messages() %}
+        <div class="alert alert-danger" style="margin-top: 10px;">{{ get_flashed_messages()[0] }}</div>
+        {% endif %}
+        <div class="row justify-content-center">
+            <form action="{{url_for('member.subscription_payment')}}"  method="post"  class="needs-validation col-5" novalidate>
+                
+                <div  class="my-5">
+                    <h3>Total Amount: <span id="show_amount"></span></h3>
+                    <input type="hidden" name="payment_amount" id="payment_amount">
+                    <input type="hidden" value="{{member_id}}" name="member_id" id="member_id">
+                </div>
+                <div class="row justify-content-around" style="height:40px;">
+                    <div class="form-check  align-self-center fw-bold col-3">
+                        <input {%if subscription['type']=='Annually' %} checked {%endif%} 
+                        required class="form-check-input" type="radio" name="subscription_type" id="Annually" value="Annually">
+                        <label class="form-check-label" for="Annually">Annually</label>
+                        <div class="invalid-feedback text-start">
+                            Select one
+                        </div> 
+                    </div>
+                    <div class="form-check align-self-center fw-bold col-3">
+                        <input  {%if subscription['type']=='Monthly' %} checked {%endif%} 
+                        required class="form-check-input" type="radio" name="subscription_type" id="Monthly" value="Monthly">
+                        <label  class="form-check-label" for="Monthly">Monthly</label>
+                        <div class="invalid-feedback text-start">
+                            Select one
+                        </div> 
+                    </div>
+                    <div class="col-5">
+                        <select  id="months"  name="months"  class="form-select not-show" aria-label="Default select example" >
+                            <option value="1">1 Month</option>
+                            <option value="2">2 Months</option>
+                            <option value="3">3 Months</option>
+                            <option value="4">4 Months</option>
+                            <option value="5">5 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="7">7 Months</option>
+                            <option value="8">8 Months</option>
+                            <option value="9">9 Months</option>
+                            <option value="10">10 Months</option>
+                            <option value="11">11 Months</option>
+                            <option value="12">12 Months</option>
+                        </select>
+                    </div>
+                </div>
+                
+                
+               
+                <div class="my-3">
+                    <label for="card_number" class="form-label">Card number:<span class="require-star">*</span></label>
+                    <input type="text" class="form-control" id="card_number" name="card_number" maxlength="19" required>
+                    <div class="invalid-feedback text-start">
+                        Please enter the credit card number.
+                    </div> 
+                </div>
+                <div class="mb-3">
+                    <label for="card_holder" class="form-label">Name on card:<span class="require-star">*</span></label>
+                    <input type="text" class="form-control" id="card_holder" name="card_holder" required>
+                    <div class="invalid-feedback text-start">
+                        Please enter the credit card holder name.
+                    </div> 
+                </div>
+                <div class="mb-3 row justify-content-between">
+                    <div class="col-5">
+                        <label for="expiry_m" class="form-label">Expire Date:<span class="require-star">*</span></label>
+                        <div class="d-flex">
+                            <div class="col-8 me-2">
+                                <select id="expiry_m"  name="expiry_m"  required class="form-select" aria-label="Default select example" >
+                                    <option   disabled selected value>MM</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <div class="invalid-feedback text-start">
+                                    Please select expire month.
+                                </div> 
+                            </div>
+                            <div class="col-8">
+                                <select id="expiry_y"  name="expiry_y"  required class="form-select" aria-label="Default select example" >
+                                    <option   disabled selected value>YY</option>
+                                    <option value="2024">24</option>
+                                    <option value="2025">25</option>
+                                    <option value="2026">26</option>
+                                    <option value="2027">27</option>
+                                    <option value="2028">28</option>
+                                    <option value="2029">29</option>
+                                    <option value="2030">30</option>
+                                    <option value="2031">31</option>
+                                    <option value="2032">32</option>
+                                    <option value="2033">33</option>
+                                    <option value="2034">34</option>
+                                    <option value="2035">35</option>
+                                </select>
+                                <div class="invalid-feedback text-start">
+                                    Please select expire year.
+                                </div>
+                            </div>
+                             
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="col-3">
+                        <label for="cvc" class="form-label">CVC:<span class="require-star">*</span></label>
+                        <input type="text" class="form-control" id="cvc" name="cvc" maxlength="3" minlength="3" required>
+                        <div class="invalid-feedback text-start">
+                            Please enter CVC number (3 digits).
+                        </div>
+                    </div>
+                    
+                </div>
+                <div >
+                    <p style="font-size:14px;">We accept Visa, Mastercard and American Express</p>
+                </div>
+                <div class="mb-3">
+                    <img src="{{url_for('static',filename='images/'+'visacard-footer.png')}}" alt="visacard" class="card-logo">
+                    <img src="{{url_for('static',filename='images/'+'mastercard-footer.png')}}" alt="mastercard" class="card-logo">
+                    <img src="{{url_for('static',filename='images/'+'americanexpress-footer.png')}}" alt="americanexpress" class="card-logo">
+                </div>
+
+                <div class="row mb-3 justify-content-between">
+                    <div class="text-center py-3 col-5">
+                        <a href="{{url_for('member.view_membership')}}"><button type="button" class="btn btn-secondary col-12">Cancel</button></a>
+                    </div>  
+                    <div class="text-center py-3 col-5">
+                        <button type="submit" class="btn btn-danger col-12">Submit</button>
+                    </div>  
+                </div>
+
+            </form>
+            
+        </div>
+
+    </div>
+    <script> 
+        $(document).ready(function() {
+           
+            update_payment_amount(); // Show payment amount on page load
+
+            $('input[type="radio"][name="subscription_type"]').change(function(){
+                if ($(this).val() === 'Monthly') {
+                    $('#months').show();
+                } else {
+                    $('#months').hide();
+                }
+                update_payment_amount(); // Update payment amount when radio button changes
+            });
+            
+            // Update payment amount when months select changes
+            $('#months').change(function(){
+                update_payment_amount();
+            });
+            function update_payment_amount() {
+                var subscription_type = $('input[type="radio"][name="subscription_type"]:checked').val();
+                var months = $('#months').val();
+                if (subscription_type==='Monthly'){
+                    $('#months').show();
+                }else{
+                    $('#months').hide();
+                }
+                //Send AJAX request to Flask route to get payment amount
+                if (subscription_type){
+                    $.ajax({
+                        url: '/member/get_payment_amount',
+                        method: 'POST',
+                        data: { months: months,subscription_type: subscription_type},
+                        success: function(response){
+                            $('#show_amount').text(' $' + response.amount+'(NZD)');
+                            $('#payment_amount').val(response.amount);
+                            
+                        },
+                        error: function(xhr, status, error){
+                            console.error(error);
+                        }
+                    });
+                }     
+            }
+
+ 
+        });
+    </script>
+{% endblock %}

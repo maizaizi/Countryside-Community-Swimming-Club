@@ -1,0 +1,91 @@
+{% extends 'memberhome.html' %}
+{% block subcontent %}
+<div class="container">
+    <!-- Display flash messages -->
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+    </div>
+    {% endfor %}
+    <!-- Class List -->
+    <div>
+        <h3 class="text-center pt-5 mb-5">Class List</h3>
+    </div>
+    <div id="class-table">
+        <table class="table table-success table-striped table-hover text-center my-3">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Capacity</th>
+                    <th scope="col">View Schedule</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class_info in all_classes %}
+                <tr>
+                    <td>{{ class_info.name }}</td>
+                    <td>{{ class_info.description }}</td>
+                    <td><img class="profile_image_small" src="{{ url_for('static', filename='images/' + class_info.image) }}" alt="{{ class_info.image }}"></td>
+                    <td>{{ class_info.duration }}</td>
+                    <td>{{ class_info.price }}</td>
+                    <td>{{ class_info.capacity }}</td>
+                    <td>
+                        <!-- Button to view class schedule -->
+                        <button type="button" class="btn btn-outline-primary fw-bold" data-bs-toggle="modal" data-bs-target="#scheduleModal{{ class_info.class_id }}">View Time</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>  
+        </table> 
+    </div>
+</div>
+
+    <!-- Modal for displaying class schedules -->
+    {% for class_info in all_classes %}
+    <div class="modal fade" id="scheduleModal{{ class_info.class_id }}" tabindex="-1" aria-labelledby="scheduleModalLabel{{ class_info.class_id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scheduleModalLabel{{ class_info.class_id }}">{{ class_info.name }} Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Here we add the class times table -->
+                    <div id="class-times-table">
+                        <table class="table table-success table-striped table-hover text-center my-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">Start Time</th>
+                                    <th scope="col">End Time</th>
+                                    <th scope="col">Instructor</th>
+                                    <th scope="col">Pool Name</th>
+                                    <th scope="col">Lane</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for class_time in class_schedules[class_info.class_id] %}
+                                <tr>
+                                    <td>{{ class_time.day }}</td>
+                                    <td>{{ class_time.start_time }}</td>
+                                    <td>{{ class_time.end_time }}</td>
+                                    <td>{{ class_time.first_name }} {{ class_time.family_name }}</td>
+                                    <td>{{ class_time.name }}</td>
+                                    <td>{{ class_time.lane_id }}</td> 
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>  
+                        </table> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

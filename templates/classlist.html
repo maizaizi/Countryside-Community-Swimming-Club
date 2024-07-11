@@ -1,0 +1,102 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <!--list all the members-->
+        <div>
+            <h3 class="text-center pt-5 mb-5">Class List</h3>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <a href="{{url_for('manager.add_class')}}"><button type="button" class="btn btn-outline-success fw-bold">Add Class</button></a>
+            </div>
+            <div class="col-6 row mb-3 justify-content-center">
+                <label for="filter" class="col-2 col-form-label"><b>Filter:</b></label>
+                <div class=" col-6">
+                    <select id="filter"  name="filter" class="form-select" aria-label="Default select example" > 
+                        <option selected value="class_name">Order by Class Name</option>
+                        <option  value="inactive_classes">Show Inactive Classes</option> 
+                    </select>  
+                </div> 
+            </div>
+        </div>
+        
+        <div id="class-table">
+            <table class="table table-success table-striped table-hover text-center my-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for class in all_classes%}
+                        <tr>
+                        {%for key,value in class.items()%}
+                            {%if key!='class_id' and key!='description'%}
+                            
+                            {%if key=='image'%}
+                            <!--add a modal wo show instructor image when clicing on the small profile image-->
+                            <td><img class="profile_image_small" src="{{url_for('static',filename='images/'+value)}}" alt="{{value}}"
+                                data-bs-toggle="modal" data-bs-target="#w{{class['class_id']}}"></td>
+                                <div class="modal fade" id="w{{class['class_id']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="imageModalLabel">{{class['name']}}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div>
+                                                    <p><span  class="fw-bold">Description: </span>{{class['description']}}</p>  
+                                                </div>
+                                                <img src="{{url_for('static',filename='images/'+class['image'])}}" alt="{{class['image']}}" class="img-fluid">
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                {%else%} 
+                                    <td>{{value}}</td>
+                                {%endif%}
+                            {%endif%}
+                            {%endfor%}
+                            <td><a href="{{url_for('manager.edit_class',class_id=class['class_id'])}}"><button type="button" class="btn btn-outline-success fw-bold">Edit</button></a></td>
+                            <td><a href="{{url_for('manager.delete_class',class_id=class['class_id'])}}">
+                                <button type="button" class="btn btn-outline-danger fw-bold">Delete</button></a></td>
+                        </tr>
+                        {%endfor%}
+                        
+                      
+                </tbody>  
+            </table> 
+        </div>
+    </div>
+<script>
+    $(document).ready(function(){
+        $('#filter').change(function(){
+            var filter_value = $('#filter').val();
+            $.ajax({
+                url: '/manager/class_filter',
+                type: 'POST',
+                data: {filter: filter_value},
+                success: function(response){
+                    $('#class-table').empty();
+                    $('#class-table').html(response);
+                }
+            });
+        });
+    });
+</script>   
+{%endblock%}

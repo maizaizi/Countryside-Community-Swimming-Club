@@ -1,0 +1,24 @@
+
+<table class="table table-success table-striped table-hover text-center my-5">
+    <thead>
+        <tr>
+            <th scope="col">Payment ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Family Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Date</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for payments in all_payments%}
+        <tr>
+            {%for key,value in payments.items()%}
+            <td>{{value}}</td>
+            {%endfor%}
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+ 

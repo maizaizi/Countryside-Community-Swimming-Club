@@ -1,0 +1,113 @@
+{% extends 'managerhome.html'%}
+
+{%block subcontent%}
+<div class="container">
+    <div class="row my-5">
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Members</h5>
+                        <a href="{{url_for('manager.list_members')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text"><span class="fw-bold">{{member_number.number}} &nbsp;&nbsp;</span> <i class="fa-solid fa-person fa-lg"></i></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Instructors</h5>
+                        <a href="{{url_for('manager.list_instructors')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text"><span class="fw-bold">{{instructor_number.number}} </span> &nbsp;&nbsp;<i class="fa-solid fa-person-swimming fa-lg"></i></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Classes</h5>
+                        <a href="{{url_for('manager.list_classes')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text"><span class="fw-bold">{{class_number.number}} </span>&nbsp;&nbsp;<i class="fa-solid fa-person-chalkboard fa-lg"></i></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Membership</h5>
+                        <a href="{{url_for('manager.view_membership_status')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text"><span class="fw-bold">{{membership_number.number}} </span>&nbsp;&nbsp;<i class="fa-solid fa-sack-dollar fa-lg"></i></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Payments</h5>
+                        <a href="{{url_for('manager.view_payments')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View, add and edit</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Financial</h5>
+                        <a href="{{url_for('manager.manager_financial')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View financial report</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">News</h5>
+                        <a href="{{url_for('manager.manage_news')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View, add and edit</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Pool</h5>
+                        <a href="{{url_for('manager.manage_pool')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View, add and edit</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Prices</h5>
+                        <a href="{{url_for('manager.manage_price')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View, add and edit</p>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
+</div>
+{%endblock%}
+

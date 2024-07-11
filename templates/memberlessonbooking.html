@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Booking</title>
+</head>
+<body>
+
+<!-- Form to book a lesson -->
+<form action="/book_lesson" method="POST">
+    <h2>Book a Lesson</h2>
+    <label for="schedule_id">Schedule ID:</label>
+    <input type="text" id="schedule_id" name="schedule_id" required><br>
+    <label for="booking_date">Booking Date:</label>
+    <input type="date" id="booking_date" name="booking_date" required><br>
+    <button type="submit">Book Lesson</button>
+</form>
+
+<!-- Form to view booked lessons -->
+<form action="/view_booked_lessons" method="GET">
+    <h2>View Booked Lessons</h2>
+    <button type="submit">View Booked Lessons</button>
+</form>
+
+<!-- Form to reschedule a booking -->
+<form action="/reschedule_booking" method="POST">
+    <h2>Reschedule Booking</h2>
+    <label for="booking_id">Booking ID:</label>
+    <input type="text" id="booking_id" name="booking_id" required><br>
+    <label for="new_schedule_id">New Schedule ID:</label>
+    <input type="text" id="new_schedule_id" name="new_schedule_id" required><br>
+    <label for="new_booking_date">New Booking Date:</label>
+    <input type="date" id="new_booking_date" name="new_booking_date" required><br>
+    <button type="submit">Reschedule Booking</button>
+</form>
+
+<!-- Form to cancel a booking -->
+<form action="/cancel_booking" method="POST">
+    <h2>Cancel Booking</h2>
+    <label for="cancel_booking_id">Booking ID:</label>
+    <input type="text" id="cancel_booking_id" name="booking_id" required><br>
+    <button type="submit">Cancel Booking</button>
+</form>
+
+</body>
+</html>

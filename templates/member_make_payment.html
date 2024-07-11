@@ -1,0 +1,26 @@
+{% extends 'memberhome.html' %}
+
+{% block subcontent %}
+<div class="container">
+    <h2>Make Payment</h2>
+    <form action="{{ url_for('member.make_payment') }}" method="post">
+        <div class="mb-3">
+            <label for="payment_date" class="form-label">Payment Date</label>
+            <input type="date" class="form-control" id="payment_date" name="payment_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" required>
+        </div>
+        <div class="mb-3">
+            <label for="payment_type" class="form-label">Payment Type</label>
+            <select class="form-select" id="payment_type" name="payment_type" required>
+                <option value="subscription">Subscription</option>
+                <option value="lesson">Lesson</option>
+            </select>
+        </div>
+        <input type="hidden" name="booking_id" value="{{ booking_id }}">
+        <button type="submit" class="btn btn-primary">Submit Payment</button>
+    </form>
+</div>
+{% endblock %}

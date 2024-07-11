@@ -1,0 +1,131 @@
+{% extends 'memberhome.html' %}
+
+{% block subcontent %}
+<div class="container">
+    <!-- Display the flash message after action -->
+    {% for message in get_flashed_messages() %}            
+    <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+    </div>  
+    {% endfor %}
+    <!-- List all the instructors -->
+    <div>
+        <h3 class="text-center pt-5 mb-3">Instructor List</h3>
+    </div>
+    <div class="row">
+        <form class="d-flex needs-validation col-4" novalidate role="search" action="{{url_for('member.search_instructor')}}" method="post">
+            <div class="me-2">
+                <input class="form-control" type="search" placeholder="Instructor Name" name="instructor_search" aria-label="Search" required>
+                <div class="text-start invalid-feedback">
+                    Please enter instructor name.
+                </div>
+            </div>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="table-overflow">
+        <table class="table table-success table-hover table-striped text-center my-3">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Family Name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instructor in instructor_list %}
+                <tr>
+                    {% for key, value in instructor.items() %}
+                    {% if key != 'profile' and key != 'expert_area' %}
+                    {% if key == 'image' %}
+                    <td><img class="profile_image_small" src="{{ url_for('static', filename='images/' + value) }}" alt="{{ value }}"></td>
+                    {% else %}
+                    <td>{{ value }}</td> 
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    <td>
+                        <button type="button" class="btn btn-outline-primary fw-bold" data-bs-toggle="modal" data-bs-target="#w{{instructor['instructor_id']}}">More Info</button>
+                        <!-- Modal to show instructor image when clicking on the small profile image -->
+                        <div class="modal fade" id="w{{instructor['instructor_id']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="imageModalLabel">{{instructor['first_name']}} {{instructor['family_name']}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start">
+                                            <p><span class="fw-bold">Expert Areas: </span>{{instructor['expert_area']}}</p>
+                                            <p><span class="fw-bold">Profile: </span>{{instructor['profile']}}</p>  
+                                        </div>
+                                        {% if instructor['image'] %}
+                                        <img src="{{url_for('static',filename='images/'+instructor['image'])}}" alt="{{instructor['image']}}" class="img-fluid">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-success fw-bold" data-bs-toggle="modal" data-bs-target="#lessonsModal{{ instructor['instructor_id'] }}">
+                            View Available Lessons
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal for displaying available lessons -->
+{% for instructor in instructor_list %}
+<div class="modal fade" id="lessonsModal{{ instructor['instructor_id'] }}" tabindex="-1" aria-labelledby="lessonsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lessonsModalLabel">Available Lessons - {{ instructor['first_name'] }} {{ instructor['family_name'] }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your logic to display available lessons here -->
+                <table class="table table-success table-striped table-hover text-center my-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Day of Week</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">End Time</th>
+                            <th scope="col">Pool Name</th>
+                            <th scope="col">Lane</th>
+                            <th scope="col">Class Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lesson in instructor_lessons[instructor['instructor_id']] %}
+                        <tr>
+                            <td>{{ lesson.day }}</td>
+                            <td>{{ lesson.start_time }}</td>
+                            <td>{{ lesson.end_time }}</td>
+                            <td>{{ lesson.pool_name }}</td>
+                            <td>{{ lesson.lane_id }}</td>
+                            <td>{{ lesson.class_name }}</td> 
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

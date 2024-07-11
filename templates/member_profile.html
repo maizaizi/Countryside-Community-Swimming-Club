@@ -1,0 +1,201 @@
+{% extends 'memberhome.html' %}
+
+{% block subcontent %}
+
+<div class="container">
+   
+        {% if get_flashed_messages() %}
+        <div class="alert alert-success" style="margin-top: 10px;">{{ get_flashed_messages()[0] }}</div>
+        {% endif %}
+        <div id="flash-message" class="alert alert-success" style="display: none; position: fixed; top: 10px; left: 10px; z-index: 1000;"></div>
+            <div class="row">
+                <div class="col-6">
+                    <h2 class="text-center pt-5 mb-3">Update Profile for 
+                        {{member['first_name']}} {{member['family_name']}}</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row mb-3 justify-content-center">
+                          <label for="member_id" class="col-3 col-form-label" hidden><b>Member ID:</b></label>
+                          <div class="col-6">
+                              <input type="text" class="form-control" id="member_id" name="member_id" hidden readonly 
+                              value="{{member['member_id']}}">
+                          </div>
+                          <div class="row mb-3 justify-content-center">
+                             <label for="title" class="col-3 col-form-label"><b>Title:</b></label>
+                            <div class=" col-6">
+                                <select id="title"  name="title"  required class="form-select" aria-label="Default select example" >
+                                    <option 
+                                    {%if member['title']=='Mr'%}selected{%endif%} value="Mr">Mr</option>
+                                    <option 
+                                    {%if member['title']=='Miss'%}selected{%endif%} value="Miss">Miss</option>
+                                    <option 
+                                    {%if member['title']=='Ms'%}selected{%endif%} value="Ms">Ms</option>
+                                    <option 
+                                    {%if member['title']=='Mrs'%}selected{%endif%} value="Mrs">Mrs</option>
+                                    <option 
+                                    {%if member['title']=='Mx'%}selected{%endif%} value="Ms">Mx</option>
+                                    <option 
+                                    {%if member['title']=='None'%}selected{%endif%} value="None">None</option>
+                                  </select>
+                                  <div class="invalid-feedback text-start">
+                                    Please select the title.
+                                </div> 
+                            </div>
+                        </div> 
+                        <div class="row mb-3 justify-content-center">
+                            <label for="first_name" class="col-3 col-form-label"><b>First Name:</b></label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="first_name" name="first_name" required 
+                                value="{{member['first_name']}}">
+                                <div class="invalid-feedback text-start">
+                                    Please enter the first name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="family_name" class="col-3 col-form-label"><b>Last Name:</b></label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="family_name" name="family_name" required
+                                value="{{member['family_name']}}">
+                                <div class="invalid-feedback text-start">
+                                    Please enter the family name.
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="position" class="col-3 col-form-label"><b>Position:</b></label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="position" name="position" required           
+                                value="{{member['position']}}">
+                                <div class="invalid-feedback text-start">
+                                    Please enter the position.
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="phone" class="col-3 col-form-label"><b>Phone:</b></label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="phone" name="phone" required           
+                                value="{{member['phone']}}">
+                                <div class="invalid-feedback text-start">
+                                    Please enter the phone number.
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="email" class="col-3 col-form-label"><b>Email:</b></label>
+                            <div class="col-6">
+                                <input type="email" class="form-control" id="email" name="email" required           
+                                value="{{member['email']}}">
+                                <div class="invalid-feedback text-start">
+                                    Please provide a valid email.
+                                </div>  
+                            </div>
+                        </div>
+                       
+                        <div class="row mb-3 justify-content-center">
+                            <label for="address" class="col-3 col-form-label"><b>Address:</b></label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="address" name="address" required           
+                                value="{{member['address']}}">
+                                <ul class="list-group" id="address-list"></ul>
+                                <div class="invalid-feedback text-start">
+                                    Please enter the address.
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="dob" class="col-3 col-form-label"><b>DOB:</b></label>
+                            <div class="col-6">
+                                <input type="date" class="form-control" id="dob" name="dob" required           
+                                value="{{member['dob']}}">
+                                <div class="invalid-feedback text-start">
+                                    Please select the date of birth.
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="health_info" class="col-3 col-form-label"><b>Health:</b></label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="health_info" name="health_info"          
+                                value="{%if member['health_info']%}{{member['health_info']}}{%else%}{{''}}{%endif%}">
+                                <div class="invalid-feedback text-start">
+                                    Please enter the health information.
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="old_image" class="col-3 col-form-label"><b>Current Image:</b></label>
+                            <input type="hidden" class="form-control" id="old_image" name="old_image"  {%if member['image']%} value="{{member['image']}}" {%endif%} readonly >          
+                            <div class="col-6">
+                                {%if member['image']%}
+                                <img class="col-12" src="{{url_for('static',filename='images/'+member['image'])}}" alt="{{member['image']}}">
+                                {%endif%}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3 justify-content-center">
+                            <label for="new_image" class="col-3 col-form-label"><b>New Image:</b></label>
+                            <div class="col-6">
+                                <input type="file" class="form-control" id="new_image" name="new_image">
+                            </div>
+                        </div>
+    
+                        <div class="text-center py-3">
+                            <button type="submit" class="btn btn-outline-success">Update Information</button>
+                        </div>    
+                    </form>
+                </div>
+                </div>
+                
+                <div class="col-6">
+                    
+                        <h3 class="text-center pt-5 mb-3">Update Password</h3>
+                        
+                        <form action="{{url_for('member.update_member_password')}}" method="post" class="needs-validation" novalidate >
+                            <div class="row mb-3 justify-content-center">
+                                <label for="id" class="col-3 col-form-label" hidden><b>Account ID:</b></label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="id" name="id" hidden readonly 
+                                    value="{{member['account_id']}}">
+                                </div>
+                            </div>
+                            <div class="row mb-3 justify-content-center">
+                                <label for="username" class="col-4 col-form-label"><b>User Name:</b></label>
+                                <div class="col-7">
+                                    <input type="text" class="form-control" id="username" name="username" required disabled 
+                                    value="{{account['username']}}">
+                                </div>
+                            </div>
+                            <div class="row mb-3 justify-content-center">
+                                <label for="old_password" class="col-4 col-form-label"><b>Old Password:</b></label>
+                                <div class="col-7">
+                                    <input type="password" class="form-control" id="old_password" name="old_password" required
+                                    placeholder="Old password">
+                                    <div class="invalid-feedback text-start">
+                                        Please enter the old password.
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="row mb-3 justify-content-center">
+                                <label for="new_password" class="col-4 col-form-label"><b>New Password:</b></label>
+                                <div class="col-7">
+                                    <input type="password" class="form-control" id="new_password" name="new_password" required
+                                    placeholder="New password">
+                                    <div class="invalid-feedback text-start">
+                                        Please enter the new password.
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="text-center py-3">
+                                <button type="submit" class="btn btn-outline-success">Update Password</button>
+                            </div>   
+                        </form>
+                    
+                </div>
+            </div>    
+           
+</div>
+            
+            
+            
+{% endblock %}

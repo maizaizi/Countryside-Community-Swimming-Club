@@ -1,0 +1,121 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h3 class="text-center pt-5 mb-3">Update Detail for 
+                    {{this_class['name']}}</h3>
+                
+                <form action="{{url_for('manager.edit_class',class_id=this_class['class_id'])}}" method="post" 
+                class="needs-validation" enctype="multipart/form-data" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="class_id" class="col-3 col-form-label" hidden><b>Class ID:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="class_id" name="class_id" hidden readonly 
+                            value="{{this_class['class_id']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="name" class="col-3 col-form-label"><b>Class Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="name" name="name" required 
+                            value="{{this_class['name']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="type" class="col-3 col-form-label"><b>Type:</b></label>
+                        <div class=" col-6">
+                            <select id="type"  name="type"  required class="form-select" aria-label="Default select example" >
+                                <option 
+                                {%if this_class['type']=='Group Class'%} selected {%endif%} value="Group Class">Group Class</option>
+                                <option 
+                                {%if this_class['type']=='Individual Lesson'%} selected {%endif%} value="Individual Lesson">Individual Lesson</option>
+                              </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the class type.
+                            </div> 
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="description" class="col-3 col-form-label"><b>Description:</b></label>
+                        <div class="col-6">
+                            <textarea class="form-control " id="description" rows="4" name="description" required>{{this_class['description']}}</textarea>
+                            <div class="invalid-feedback text-start">
+                                Please enter the class description.
+                            </div> 
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3 justify-content-center">
+                        <label for="duration" class="col-3 col-form-label"><b>Duration (Mins):</b></label>
+                        <div class="col-6">
+                            <input type="number" class="form-control" id="duration" name="duration" required           
+                            value="{{this_class['duration']}}" step="15" min="0" >
+                            <div class="invalid-feedback text-start">
+                                Please enter the class duration.
+                            </div>  
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-3 justify-content-center">
+                        <label for="price" class="col-3 col-form-label"><b>Price ($):</b></label>
+                        <div class="col-6">
+                            <input type="number" class="form-control" id="price" name="price" required           
+                            value="{{this_class['price']}}" min="0">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class price.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="capacity" class="col-3 col-form-label"><b>Capacity:</b></label>
+                        <div class="col-6">
+                            <input type="number" class="form-control" id="capacity" name="capacity" required           
+                            value="{{this_class['capacity']}}" min="1">
+                            <div class="invalid-feedback text-start">
+                                Please enter the class capacity.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="current_image" class="col-3 col-form-label"><b>Current Image:</b></label>
+                        <input type="hidden" class="form-control" id="current_image" name="current_image" value="{{this_class['image']}}" readonly >          
+                        <div class="col-6">
+                            <img class="col-12" src="{{url_for('static',filename='images/'+this_class['image'])}}" alt="{{this_class['image']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="new_image" class="col-3 col-form-label"><b>New Image:</b></label>
+                        <div class="col-6">
+                            <input type="file" class="form-control" id="new_image" name="new_image">
+                        </div>
+                    </div>
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Update Class</button>
+                    </div>    
+                </form>
+            
+            </div>
+            
+        </div>
+        
+       
+       
+        
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}

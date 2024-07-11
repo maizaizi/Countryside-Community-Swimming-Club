@@ -1,0 +1,106 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <!--list all the instructors-->
+        <div>
+            <h3 class="text-center pt-5 mb-3">Instructor List</h3>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <a href="{{url_for('manager.get_instructor_form')}}"><button type="button" class="btn btn-outline-success fw-bold">Add Instructor</button></a>
+            </div>
+            <div class="col-3">
+                <a href="{{url_for('manager.list_available_time')}}"><button type="button" class="btn btn-outline-success fw-bold">View Availability </button></a>
+            </div>
+            <form class="d-flex needs-validation col-4" novalidate role="search" action="{{url_for('manager.search_instructor')}}" method="post">
+                <div class="me-2">
+                    <input class="form-control" type="search" placeholder="Instructor Name" name="instructor_search" aria-label="Search" required>
+                    <div class="text-start invalid-feedback">
+                        Please enter instructor name.
+                    </div>
+                </div>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="table-overflow">
+            <table class="table table-success table-hover table-striped text-center my-3">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Family Name</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for instructor in instructor_list%}
+                    <tr>
+                        {%for key,value in instructor.items()%}
+                            {%if key !='profile' and key !='expert_area'%}
+                                {%if key=='image'%}
+                                    {%if value%}
+                                    <!--add a modal wo show instructor image when clicing on the small profile image-->
+                                    <td ><img class="profile_image_small" src="{{url_for('static',filename='images/'+value)}}" alt="{{value}}"
+                                        data-bs-toggle="modal" data-bs-target="#w{{instructor['instructor_id']}}"></td>
+                                        <div class="modal fade" id="w{{instructor['instructor_id']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="imageModalLabel">{{instructor['first_name']}} {{instructor['family_name']}}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div>
+                                                            <p><span  class="fw-bold">Expert Areas: </span>{{instructor['expert_area']}}</p>
+                                                            <p><span  class="fw-bold">Profile: </span>{{instructor['profile']}}</p>   
+                                                        </div>
+                                                        <img src="{{url_for('static',filename='images/'+instructor['image'])}}" alt="{{instructor['image']}}" class="img-fluid">
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>    
+                                    {%else%}
+                                    <td>{{value}}</td> 
+                                    {%endif%}
+                                    
+                                {%else%}
+                                    <td>{{value}}</td>  
+                                {%endif%}
+                                {%endif%}
+
+                       {%endfor%}  
+                        <td><a href="{{url_for('manager.get_instructor_detail',instructor_id=instructor['instructor_id'])}}"><button type="button" class="btn btn-outline-success fw-bold">Edit</button></a></td>
+                        <td><a href="{{url_for('manager.edit_instructor_status',instructor_id=instructor['instructor_id'])}}">
+                            <button type="button" class="btn btn-outline-danger fw-bold">
+                                {%if instructor['status']=='active'%}Delete
+                                {%else%}Active
+                                {%endif%}
+                            </button></a>
+                        </td>
+                    </tr>
+                    {%endfor%} 
+                </tbody>
+            </table> 
+        </div>
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}

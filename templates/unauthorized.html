@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+
+{%block content%}
+
+<div style="background:url(../static/images/swimmingpool.jpg) no-repeat;background-size: cover; height: 100vh;">
+    <div style="position:absolute;top:40%;width:100%;text-align: center;">
+      <div style="background-color: #1f2b598a; color:#fff; padding: 18px; margin:0 100px; letter-spacing: 3px;">
+        <h3>Sorry, You Are Not Allowed to Access This Page</h3>
+        <a href="{{url_for('auth.user')}}"><button type="button" class="btn btn-outline-light mt-5 fw-bold fs-3">Continue</button></a>
+      </div>    
+    </div>  
+  </div>
+
+{%endblock%}

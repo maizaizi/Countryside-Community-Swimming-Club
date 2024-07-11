@@ -1,0 +1,84 @@
+{%extends 'instructorhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <h3 class="text-center pt-5 mb-5">Add New Time Schedule</h3>
+                <form action="{{url_for('instructor.add_time_schedule')}}" method="post" 
+                class="needs-validation" enctype="multipart/form-data" novalidate >
+                <div class="row mb-3 justify-content-center">
+                    <label for="dayofweek" class="col-3 col-form-label"><b>Day of Week:</b></label>
+                    <div class=" col-8">
+                        <select id="dayofweek"  name="dayofweek"  required class="form-select" aria-label="Default select example" >
+                            <option   disabled selected value>Please select the day</option>
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                            <option value="saturday">Saturday</option>
+                            <option value="sunday">Sunday</option>
+                          </select>
+                          <div class="invalid-feedback text-start">
+                            Please select the day.
+                        </div>  
+                    </div>
+                </div> 
+
+                <div class="row mb-3 justify-content-center">
+                    <label for="start_time" class="col-3 col-form-label"><b>Start Time:</b></label>
+                    <div class=" col-8">
+                        <select id="start_time"  name="start_time"  required class="form-select" aria-label="Default select example" >
+                            <option   disabled selected value>Please select the start time</option>
+                            {%for time in timeslots%}
+                            <option value="{{time}}">{{time}}</option>
+                            {%endfor%}
+                        </select>
+                        <div class="invalid-feedback text-start">
+                            Please select the start time.
+                        </div>  
+                    </div> 
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <label for="end_time" class="col-3 col-form-label"><b>End Time:</b></label>
+                    <div class=" col-8">
+                        <select id="end_time"  name="end_time"  required class="form-select" aria-label="Default select example" >
+                            <option   disabled selected value>Please select the end time</option>
+                            {%for time in timeslots%}
+                            <option value="{{time}}">{{time}}</option>
+                            {%endfor%}
+                        </select>
+                        <div class="invalid-feedback text-start">
+                            Please select the end time.
+                        </div>  
+                    </div>
+                </div>
+                    
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Add Time Schedule</button>
+                    </div>    
+                </form>
+            
+            </div>
+            
+
+        
+    </div>
+        
+       
+       
+        
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}

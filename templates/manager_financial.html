@@ -1,0 +1,21 @@
+{% extends 'managerhome.html' %}
+
+{% block subcontent %}
+    <div class="container mt-5"> <!-- Add top margin -->
+        <div style="text-align: center;">
+            <h1>Financial Reports</h1>
+            <p>Please select the financial report:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 20px;">
+                    <a href="{{ url_for('manager.income_statement') }}" style="background-color: #007bff; color: white; padding: 10px 20px; border: 2px solid #007bff; border-radius: 5px; text-decoration: none; display: inline-block;">Income Statement</a>
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <a href="{{ url_for('manager.class_statement') }}" style="background-color: #007bff; color: white; padding: 10px 20px; border: 2px solid #007bff; border-radius: 5px; text-decoration: none; display: inline-block;">Class Statement</a>
+                </li>
+            </ul>
+            <div>
+                <a href="{{ url_for('manager.manager') }}" class="btn" style="background-color: #007bff; color: white; padding: 10px 20px; border: 2px solid #007bff; border-radius: 5px; text-decoration: none; display: inline-block;">Back</a>
+            </div>
+        </div> 
+    </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{%extends 'managerhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <!--list all the members-->
+        <div>
+            <h3 class="text-center pt-5 mb-3">Member List</h3>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <a href="{{url_for('manager.get_member_form')}}"><button type="button" class="btn btn-outline-success fw-bold">Add Member</button></a>
+            </div>
+            <form class="d-flex needs-validation col-4" novalidate role="search" action="{{url_for('manager.search_member')}}" method="post">
+                <div class="me-2">
+                    <input class="form-control" type="search" placeholder="Member Name" name="member_search" aria-label="Search" required>
+                    <div class="text-start invalid-feedback">
+                        Please enter member name.
+                    </div>
+                </div>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+        <div >
+            <table class="table table-success table-striped table-hover text-center my-3">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Family Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">DOB</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">More Info</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for member in member_list%}
+                    <tr>
+                        {%for key,value in member.items()%}
+                            {%if key!='health_info' and key!='position' and key!='address'  and key!='image'%}
+                            <td>{{value}}</td> 
+                            {%endif%}
+                       {%endfor%}  
+                       <td><button type="button" class="btn btn-outline-primary fw-bold"
+                        data-bs-toggle="modal" data-bs-target="#w{{member['member_id']}}"
+                        >More Info</button>
+                         <!--add a modal wo show instructor image when clicing on the small profile image-->
+                         <div class="modal fade" id="w{{member['member_id']}}" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="imageModalLabel">{{member['first_name']}} {{member['family_name']}}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start">
+                                            <p><span class="fw-bold">Position: </span>{{member['position']}}</p>
+                                            <p><span class="fw-bold">Address: </span>{{member['address']}}</p>
+                                            <p><span class="fw-bold">Health Information: </span>{{member['health_info']}}</p>
+                                            <p><span class="fw-bold">Attendance: </span>{{ member['attendance'] }}</p>
+                                        </div>
+                                        {%if member['image']%}
+                                        <img src="{{url_for('static',filename='images/'+member['image'])}}" alt="{{member['image']}}" class="img-fluid">
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                        <td><a href="{{url_for('manager.get_member_detail',member_id=member['member_id'])}}"><button type="button" class="btn btn-outline-success fw-bold">Edit</button></a></td>
+                        <td><a href="{{url_for('manager.edit_member_status',member_id=member['member_id'])}}">
+                            <button type="button" class="btn btn-outline-danger fw-bold">
+                                {%if member['status']=='active'%}Delete
+                                {%else%}Active
+                                {%endif%}
+                            </button></a>
+                        </td>
+                    </tr>
+                    {%endfor%} 
+                </tbody>
+            </table> 
+        </div>
+    </div>
+   
+{%endblock%}

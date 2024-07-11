@@ -1,0 +1,44 @@
+{% extends 'instructorhome.html'%}
+
+{%block subcontent%}
+<div class="container">
+    <div class="row my-5">
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">All Timetables</h5>
+                        <a href="{{url_for('instructor.view_timetable')}}"><button class="manage-btn btn btn-sm btn-outline-success">View</button></a>
+                    </div>
+                    <p class="card-text">View Timetables</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Availability</h5>
+                        <a href="{{url_for('instructor.time_schedule')}}"><button class="manage-btn btn btn-sm btn-outline-success">Manage</button></a>
+                    </div>
+                    <p class="card-text">View and Manage</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">News</h5>
+                        <a href="{{url_for('instructor.view_news')}}"><button class="manage-btn btn btn-sm btn-outline-success">View</button></a>
+                    </div>
+                    <p class="card-text">View News</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{%endblock%}
+

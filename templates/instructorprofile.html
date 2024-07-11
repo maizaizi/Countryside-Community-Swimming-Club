@@ -1,0 +1,197 @@
+{%extends 'instructorhome.html'%}
+{%block subcontent%}
+    <div class="container">
+        <!--display the flash message after action-->
+        {% for message in get_flashed_messages() %}            
+        <div class="alert alert-danger text-center my-4" role="alert">
+        <p class="pt-3"><b>{{ message }}</b></p>
+        </div>  
+        {% endfor %}
+        <div class="row">
+            <div class="col-6">
+                <h3 class="text-center pt-5 mb-3">Update Profile</h3>
+                
+                <form action="{{url_for('instructor.update_profile')}}" method="post" 
+                class="needs-validation" enctype="multipart/form-data" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="instructor_id" class="col-3 col-form-label" hidden><b>Member ID:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="instructor_id" name="instructor_id" hidden readonly 
+                            value="{{instructor['instructor_id']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="title" class="col-3 col-form-label"><b>Title:</b></label>
+                        <div class=" col-6">
+                            <select id="title"  name="title"  required class="form-select" aria-label="Default select example" >
+                                <option 
+                                {%if instructor['title']=='Mr'%}selected{%endif%} value="Mr">Mr</option>
+                                <option 
+                                {%if instructor['title']=='Miss'%}selected{%endif%} value="Miss">Miss</option>
+                                <option 
+                                {%if instructor['title']=='Ms'%}selected{%endif%} value="Ms">Ms</option>
+                                <option 
+                                {%if instructor['title']=='Mrs'%}selected{%endif%} value="Mrs">Mrs</option>
+                                <option 
+                                {%if instructor['title']=='Mx'%}selected{%endif%} value="Ms">Mx</option>
+                                <option 
+                                {%if instructor['title']=='None'%}selected{%endif%} value="None">None</option>
+                              </select>
+                              <div class="invalid-feedback text-start">
+                                Please select the title.
+                            </div>  
+                        </div>
+                    </div> 
+                    <div class="row mb-3 justify-content-center">
+                        <label for="first_name" class="col-3 col-form-label"><b>First Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="first_name" name="first_name" required 
+                            value="{{instructor['first_name']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="family_name" class="col-3 col-form-label"><b>Last Name:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="family_name" name="family_name" required
+                            value="{{instructor['family_name']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the family name.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="position" class="col-3 col-form-label"><b>Position:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="position" name="position" required           
+                            value="{{instructor['position']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the position.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="phone" class="col-3 col-form-label"><b>Phone:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="phone" name="phone" required           
+                            value="{{instructor['phone']}}">
+                            <div class="invalid-feedback text-start">
+                                Please enter the phone number.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="email" class="col-3 col-form-label"><b>Email:</b></label>
+                        <div class="col-6">
+                            <input type="email" class="form-control" id="email" name="email" required           
+                            value="{{instructor['email']}}">
+                            <div class="invalid-feedback text-start">
+                                Please provide a valid email.
+                            </div>  
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-3 justify-content-center">
+                        <label for="profile" class="col-3 col-form-label"><b>Profile:</b></label>
+                        <div class="col-6">
+                            <textarea class="form-control " id="profile" rows="4" name="profile" required>{{instructor['profile']}}</textarea>
+                            <div class="invalid-feedback text-start">
+                                Please enter the profile.
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="expert_area" class="col-3 col-form-label"><b>Expert In:</b></label>
+                        <div class="col-6">
+                            <select class="form-select" name="expert_area" id="expert_area" multiple required aria-label="multiple select example">
+                                {%for class in all_classes%}
+                                <option value="{{class['name']}}"  {%if class['name'] in instructor['expert_area']%} selected {%endif%}
+                                >{{class['name']}}</option>
+                                {%endfor%}
+                            </select>
+                            <div class="invalid-feedback text-start">
+                                Please select the expert areas.
+                            </div> 
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 justify-content-center">
+                        <label for="old_image" class="col-3 col-form-label"><b>Image:</b></label>
+                        <input type="hidden" class="form-control" id="old_image" name="old_image" value="{{instructor['image']}}" readonly >          
+                        <div class="col-6">
+                            <img class="col-12" src="{{url_for('static',filename='images/'+instructor['image'])}}" alt="{{instructor['image']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="new_image" class="col-3 col-form-label"><b>New Image:</b></label>
+                        <div class="col-6">
+                            <input type="file" class="form-control" id="new_image" name="new_image">
+                        </div>
+                    </div>
+
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Update Information</button>
+                    </div>    
+                </form>
+            
+            </div>
+            <div class="col-6">
+                <h3 class="text-center pt-5 mb-3">Update Password</h3>
+                <div>
+                <form action="{{url_for('instructor.update_password')}}" method="post" class="needs-validation" novalidate >
+                    <div class="row mb-3 justify-content-center">
+                        <label for="id" class="col-3 col-form-label" hidden><b>Account ID:</b></label>
+                        <div class="col-6">
+                            <input type="text" class="form-control" id="id" name="id" hidden readonly 
+                            value="{{instructor['account_id']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="username" class="col-4 col-form-label"><b>User Name:</b></label>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="username" name="username" required disabled 
+                            value="{{instructor['username']}}">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="old_password" class="col-4 col-form-label"><b>Old Password:</b></label>
+                        <div class="col-7">
+                            <input type="password" class="form-control" id="old_password" name="old_password" required
+                            placeholder="Old password">
+                            <div class="invalid-feedback text-start">
+                                Please enter the old password.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <label for="new_password" class="col-4 col-form-label"><b>New Password:</b></label>
+                        <div class="col-7">
+                            <input type="password" class="form-control" id="new_password" name="new_password" required
+                            placeholder="New password">
+                            <div class="invalid-feedback text-start">
+                                Please enter the new password.
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="text-center py-3">
+                        <button type="submit" class="btn btn-outline-success">Update Password</button>
+                    </div>   
+                </form>
+                </div>
+            </div>
+
+        </div>
+        
+       
+       
+        
+
+        
+        
+
+
+    </div>
+   
+{%endblock%}
